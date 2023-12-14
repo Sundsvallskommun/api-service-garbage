@@ -1,0 +1,5 @@
+kubernetes:
+  informer:
+    enabled: false
+  manifests:
+    enabled: false

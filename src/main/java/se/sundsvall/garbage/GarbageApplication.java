@@ -1,13 +1,12 @@
 package se.sundsvall.garbage;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import static org.springframework.boot.SpringApplication.run;
 
-@SpringBootApplication
+import se.sundsvall.dept44.ServiceApplication;
+
+@ServiceApplication
 public class GarbageApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(GarbageApplication.class, args);
-    }
-    
+	public static void main(String... args) {
+		run(GarbageApplication.class, args);
+	}
 }

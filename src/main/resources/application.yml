@@ -1,0 +1,17 @@
+openapi:
+  name: api-service-garbage
+  title: Garbage
+  version: '@project.version@'
+spring:
+  application:
+    name: api-garbage
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
