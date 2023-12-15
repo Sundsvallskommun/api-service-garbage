@@ -15,3 +15,8 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      pool-name: garbage-pool
+    type: com.zaxxer.hikari.HikariDataSource

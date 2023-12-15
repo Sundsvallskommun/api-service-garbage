@@ -40,7 +40,7 @@ public class GarbageScheduleEntity {
 	@Column(name = "additionalInformation")
 	private String additionalInformation;
 
-	@Column(name = "facilityCategory")
+	@Column(name = "facilityCategory", columnDefinition = "int(11)")
 	private FacilityCategory facilityCategory;
 
 	@Column(name = "driveSchedule")
