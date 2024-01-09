@@ -18,37 +18,36 @@ import se.sundsvall.garbage.service.mapper.Mapper;
 @Service
 @EnableScheduling
 public class GarbageService {
-    
-    private final GarbageScheduleRepository repository;
-    private final Mapper mapper;
-    private final FileHandler fileHandler;
-    private final GarbageScheduleSpecification garbageScheduleSpecification;
-    
-    
-    public GarbageService(GarbageScheduleRepository repository, Mapper mapper, FileHandler fileHandler, GarbageScheduleSpecification garbageScheduleSpecification) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.fileHandler = fileHandler;
-        this.garbageScheduleSpecification = garbageScheduleSpecification;
-    }
-    
-    public List<GarbageScheduleResponse> getGarbageSchedules(GarbageScheduleRequest request) {
-        return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request), getPagingParameters(request))
-            .stream()
-            .map(mapper::entityToResponse)
-            .toList();
-    }
-    
-    @Scheduled(cron = "0 0 5 * * MON-FRI")
-    public void updateGarbageSchedules() {
-        fileHandler.downloadFile();
-        repository.deleteAllInBatch();
-        repository.saveAll(fileHandler.parseFile());
-        
-    }
-    
-    private Pageable getPagingParameters(GarbageScheduleRequest request) {
-        return PageRequest.of(request.getPage() - 1, request.getLimit());
-    }
-    
+
+	private final GarbageScheduleRepository repository;
+
+	private final FileHandler fileHandler;
+
+	private final GarbageScheduleSpecification garbageScheduleSpecification;
+	
+	public GarbageService(final GarbageScheduleRepository repository, final FileHandler fileHandler, final GarbageScheduleSpecification garbageScheduleSpecification) {
+		this.repository = repository;
+		this.fileHandler = fileHandler;
+		this.garbageScheduleSpecification = garbageScheduleSpecification;
+	}
+
+	public List<GarbageScheduleResponse> getGarbageSchedules(final GarbageScheduleRequest request) {
+		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request), getPagingParameters(request))
+			.stream()
+			.map(Mapper::entityToResponse)
+			.toList();
+	}
+
+	@Scheduled(cron = "0 0 5 * * MON-FRI")
+	public void updateGarbageSchedules() {
+		fileHandler.downloadFile();
+		repository.deleteAllInBatch();
+		repository.saveAll(fileHandler.parseFile());
+
+	}
+
+	private Pageable getPagingParameters(final GarbageScheduleRequest request) {
+		return PageRequest.of(request.getPage() - 1, request.getLimit());
+	}
+
 }

@@ -2,6 +2,7 @@ package se.sundsvall.garbage.integration.filehandler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,15 +14,15 @@ import java.nio.file.StandardCopyOption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import se.sundsvall.garbage.api.model.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 
 @ExtendWith(MockitoExtension.class)
 class FileHandlerTest {
 
-	@Spy
+	@Mock
 	private SftpProperties sftpProperties;
 
 	@InjectMocks
@@ -34,7 +35,7 @@ class FileHandlerTest {
 		final var file = new File("src/test/resources/mockfiles/schedule.csv");
 
 		if (file.exists()) {
-			try (var inputStream = new FileInputStream(file)) {
+			try (final var inputStream = new FileInputStream(file)) {
 				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 			} catch (final IOException e) {
 				throw new RuntimeException(e);
@@ -48,7 +49,7 @@ class FileHandlerTest {
 			.isNotNull()
 			.hasSize(2);
 
-		final var firstRow = result.get(0);
+		final var firstRow = result.getFirst();
 		assertThat(firstRow.getDriveSchedule()).isEqualTo("KP50TI2");
 		assertThat(firstRow.getId()).isNull();
 		assertThat(firstRow.getCity()).isEqualTo("Sundsvall");
@@ -65,17 +66,22 @@ class FileHandlerTest {
 
 		final var result = fileHandler.parseFile();
 
-		assertThat(result).isNull();
+		assertThat(result).isEmpty();
 
 	}
 
 	@Test
 	void downloadFile() {
-		fileHandler.downloadFile();
+		when(sftpProperties.username()).thenReturn("username");
+		when(sftpProperties.password()).thenReturn("password");
+		when(sftpProperties.remoteHost()).thenReturn("remoteHost");
+		when(sftpProperties.filename()).thenReturn("filename");
 
-		verify(sftpProperties).getUsername();
-		verify(sftpProperties).getPassword();
-		verify(sftpProperties).getRemoteHost();
-		verify(sftpProperties).getFilename();
+		fileHandler.downloadFile();
+		verify(sftpProperties).username();
+		verify(sftpProperties).password();
+		verify(sftpProperties).remoteHost();
+		verify(sftpProperties).filename();
 	}
+
 }

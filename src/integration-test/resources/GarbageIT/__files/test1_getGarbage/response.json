@@ -1,0 +1,14 @@
+[
+  {
+    "address": {
+      "street": "Testgatan",
+      "houseNumber": "2",
+      "postalCode": "85731",
+      "city": "Sundsvall"
+    },
+    "additionalInformation": "A",
+    "garbageScheduledDay": "TUESDAY",
+    "garbageScheduledWeek": "EVEN",
+    "facilityCategory": "FRITIDSHUS"
+  }
+]

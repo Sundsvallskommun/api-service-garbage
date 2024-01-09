@@ -1,6 +1,5 @@
 package se.sundsvall.garbage.api.model;
 
-
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
@@ -12,11 +11,14 @@ import static org.hamcrest.CoreMatchers.allOf;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-class GarbageScheduleRequestTest {
+import se.sundsvall.garbage.api.model.enums.Week;
+import se.sundsvall.garbage.api.model.enums.WeekDay;
+
+class GarbageScheduleResponseTest {
 
 	@Test
 	void testBean() {
-		MatcherAssert.assertThat(GarbageScheduleRequest.class, allOf(
+		MatcherAssert.assertThat(GarbageScheduleResponse.class, allOf(
 			hasValidBeanConstructor(),
 			hasValidGettersAndSetters(),
 			hasValidBeanHashCode(),
@@ -28,41 +30,33 @@ class GarbageScheduleRequestTest {
 	void testBuilderMethods() {
 
 		// Arrange
-		final var street = "Testgatan";
-		final var houseNumber = "12";
-		final var postalCode = "85731";
-		final var city = "Sundsvall";
+		final var address = Address.builder().build();
 		final var additionalInformation = "A";
-		final var page = 1;
-		final var limit = 10;
-
+		final var garbageScheduledDay = WeekDay.TUESDAY;
+		final var garbageScheduledWeek = Week.EVEN;
 
 		// Act
-		final var request = GarbageScheduleRequest.builder()
-			.withStreet(street)
-			.withHouseNumber(houseNumber)
-			.withPostalCode(postalCode)
-			.withCity(city)
+		final var request = GarbageScheduleResponse.builder()
+			.withAddress(address)
 			.withAdditionalInformation(additionalInformation)
-			.withPage(page)
-			.withLimit(limit)
+			.withGarbageScheduledDay(garbageScheduledDay)
+			.withGarbageScheduledWeek(garbageScheduledWeek)
 			.build();
 
 		// Assert
-		assertThat(request.getPage()).isEqualTo(page);
-		assertThat(request.getLimit()).isEqualTo(limit);
-		assertThat(request.getStreet()).isEqualTo(street);
-		assertThat(request.getPostalCode()).isEqualTo(postalCode);
-		assertThat(request.getCity()).isEqualTo(city);
+		assertThat(request.getGarbageScheduledWeek()).isEqualTo(garbageScheduledWeek);
+		assertThat(request.getGarbageScheduledDay()).isEqualTo(garbageScheduledDay);
+		assertThat(request.getAddress()).isEqualTo(address);
 		assertThat(request.getAdditionalInformation()).isEqualTo(additionalInformation);
-		assertThat(request.getHouseNumber()).isEqualTo(houseNumber);
+
 
 	}
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		assertThat(GarbageScheduleRequest.builder().build()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
-		assertThat(new GarbageScheduleRequest()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
+		assertThat(GarbageScheduleResponse.builder().build()).hasAllNullFieldsOrProperties();
+		assertThat(new GarbageScheduleResponse()).hasAllNullFieldsOrProperties();
 	}
+
 
 }

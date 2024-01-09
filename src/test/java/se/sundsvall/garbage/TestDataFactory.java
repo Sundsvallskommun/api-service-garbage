@@ -3,9 +3,11 @@ package se.sundsvall.garbage;
 import java.util.List;
 
 import se.sundsvall.garbage.api.model.Address;
-import se.sundsvall.garbage.api.model.FacilityCategory;
 import se.sundsvall.garbage.api.model.GarbageScheduleRequest;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.Week;
+import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 
 public final class TestDataFactory {
@@ -40,9 +42,10 @@ public final class TestDataFactory {
 	public static List<GarbageScheduleResponse> buildGarbageScheduleResponse() {
 		return List.of(GarbageScheduleResponse.builder()
 			.withAddress(Address.builder().withStreet("SomeStreet").withCity("someCity").withHouseNumber("2").withPostalCode("12345").build())
-			.withGarbageScheduledWeek(GarbageScheduleResponse.Week.EVEN)
-			.withGarbageScheduledDay(GarbageScheduleResponse.WeekDay.TUESDAY)
+			.withGarbageScheduledWeek(Week.EVEN)
+			.withGarbageScheduledDay(WeekDay.TUESDAY)
 			.withFacilityCategory(FacilityCategory.VILLA)
 			.build());
 	}
+
 }

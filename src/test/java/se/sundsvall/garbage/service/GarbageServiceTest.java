@@ -2,7 +2,6 @@ package se.sundsvall.garbage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -14,7 +13,6 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,28 +22,31 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import se.sundsvall.garbage.api.model.FacilityCategory;
-import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.Week;
+import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.integration.db.GarbageScheduleRepository;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 import se.sundsvall.garbage.integration.db.specification.GarbageScheduleSpecification;
 import se.sundsvall.garbage.integration.filehandler.FileHandler;
-import se.sundsvall.garbage.service.mapper.Mapper;
 
 @ExtendWith(MockitoExtension.class)
 class GarbageServiceTest {
 
 	private final Page<GarbageScheduleEntity> garbageSchedulePage = new PageImpl<>(Collections.singletonList(buildGarbageScheduleEntity()));
+
 	@Mock
 	private Specification<GarbageScheduleEntity> mockSpecification;
+
 	@Mock
 	private GarbageScheduleRepository repository;
-	@Mock(answer = Answers.CALLS_REAL_METHODS)
-	private Mapper mapper;
+
 	@Mock
 	private FileHandler fileHandler;
+
 	@Mock
 	private GarbageScheduleSpecification garbageScheduleSpecification;
+
 	@InjectMocks
 	private GarbageService service;
 
@@ -59,19 +60,17 @@ class GarbageServiceTest {
 		final var result = service.getGarbageSchedules(request);
 
 		assertThat(result).isNotNull();
-		assertThat(result.get(0).getGarbageScheduledDay()).isEqualTo(GarbageScheduleResponse.WeekDay.FRIDAY);
-		assertThat(result.get(0).getGarbageScheduledWeek()).isEqualTo(GarbageScheduleResponse.Week.ODD);
-		assertThat(result.get(0).getAdditionalInformation()).isEqualTo(request.getAdditionalInformation());
-		assertThat(result.get(0).getAddress().getPostalCode()).isEqualTo(request.getPostalCode());
-		assertThat(result.get(0).getAddress().getStreet()).isEqualTo(request.getStreet());
-		assertThat(result.get(0).getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
-		assertThat(result.get(0).getAddress().getCity()).isEqualTo(request.getCity());
-		assertThat(result.get(0).getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
+		assertThat(result.getFirst().getGarbageScheduledDay()).isEqualTo(WeekDay.FRIDAY);
+		assertThat(result.getFirst().getGarbageScheduledWeek()).isEqualTo(Week.ODD);
+		assertThat(result.getFirst().getAdditionalInformation()).isEqualTo(request.getAdditionalInformation());
+		assertThat(result.getFirst().getAddress().getPostalCode()).isEqualTo(request.getPostalCode());
+		assertThat(result.getFirst().getAddress().getStreet()).isEqualTo(request.getStreet());
+		assertThat(result.getFirst().getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
+		assertThat(result.getFirst().getAddress().getCity()).isEqualTo(request.getCity());
+		assertThat(result.getFirst().getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
 
 		verifyNoInteractions(fileHandler);
-		verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<GarbageScheduleEntity>>any(), any(Pageable.class));
-		verify(mapper, times(1)).entityToResponse(any());
-		verifyNoMoreInteractions(mapper);
+		verify(repository).findAll(ArgumentMatchers.<Specification<GarbageScheduleEntity>>any(), any(Pageable.class));
 		verifyNoMoreInteractions(repository);
 	}
 
@@ -80,13 +79,13 @@ class GarbageServiceTest {
 
 		service.updateGarbageSchedules();
 
-		verify(fileHandler, times(1)).downloadFile();
-		verify(fileHandler, times(1)).parseFile();
-		verify(repository, times(1)).deleteAllInBatch();
-		verify(repository, times(1)).saveAll(any());
+		verify(fileHandler).downloadFile();
+		verify(fileHandler).parseFile();
+		verify(repository).deleteAllInBatch();
+		verify(repository).saveAll(any());
 		verifyNoMoreInteractions(fileHandler);
 		verifyNoMoreInteractions(repository);
-		verifyNoInteractions(mapper);
 
 	}
+
 }

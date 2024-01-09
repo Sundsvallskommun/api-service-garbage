@@ -4,8 +4,12 @@ import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.VFS;
@@ -14,11 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-
-import se.sundsvall.garbage.api.model.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 
 @Component
@@ -26,10 +26,12 @@ import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 public class FileHandler {
 
 	private static final String TEMP_FILE = System.getProperty("java.io.tmpdir") + "/schedule.csv";
+
 	private static final Logger log = LoggerFactory.getLogger(FileHandler.class);
+
 	private final SftpProperties sftpProperties;
 
-	public FileHandler(SftpProperties sftpProperties) {
+	public FileHandler(final SftpProperties sftpProperties) {
 		this.sftpProperties = sftpProperties;
 	}
 
@@ -38,10 +40,10 @@ public class FileHandler {
 			final var manager = VFS.getManager();
 			final var local = manager.resolveFile(TEMP_FILE);
 			final var remote = manager.resolveFile(String.format("sftp://%s:%s@%s/%s",
-				sftpProperties.getUsername(),
-				sftpProperties.getPassword(),
-				sftpProperties.getRemoteHost(),
-				sftpProperties.getFilename()));
+				sftpProperties.username(),
+				sftpProperties.password(),
+				sftpProperties.remoteHost(),
+				sftpProperties.filename()));
 			local.copyFrom(remote, Selectors.SELECT_SELF);
 			local.close();
 			remote.close();
@@ -55,7 +57,7 @@ public class FileHandler {
 		final var csvMapper = new CsvMapper();
 		final var schema = buildSchema();
 
-		try (MappingIterator<ParsedRow> it = csvMapper.readerFor(ParsedRow.class)
+		try (final MappingIterator<ParsedRow> it = csvMapper.readerFor(ParsedRow.class)
 			.with(schema)
 			.readValues(new FileReader(TEMP_FILE, StandardCharsets.ISO_8859_1))) {
 			final var result = it.readAll().stream()
@@ -67,11 +69,11 @@ public class FileHandler {
 			return result;
 		} catch (final Exception e) {
 			log.info("Something went wrong parsing file", e);
-			return null;
+			return Collections.emptyList();
 		}
 	}
 
-	private GarbageScheduleEntity mapToEntity(ParsedRow row) {
+	private GarbageScheduleEntity mapToEntity(final ParsedRow row) {
 		return GarbageScheduleEntity.builder()
 			.withStreet(row.getAddress())
 			.withHouseNumber(row.getAdressNumber())
@@ -95,4 +97,5 @@ public class FileHandler {
 			.addColumn("city")
 			.build().withColumnSeparator(';');
 	}
+
 }
