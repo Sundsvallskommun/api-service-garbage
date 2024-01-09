@@ -17,7 +17,7 @@ spring:
           schema-generation:
             create-source: metadata
             database:
-              action: none
+              action: validate
             scripts:
               action: create
               create-target: target/database/generated-schema.sql

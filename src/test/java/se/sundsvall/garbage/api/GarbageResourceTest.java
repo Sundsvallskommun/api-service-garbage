@@ -6,54 +6,67 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
 import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleResponse;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
-import se.sundsvall.garbage.api.model.FacilityCategory;
+import se.sundsvall.garbage.GarbageApplication;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.Week;
+import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.service.GarbageService;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = GarbageApplication.class, webEnvironment = RANDOM_PORT)
+@ActiveProfiles("junit")
 class GarbageResourceTest {
 
-	@Mock
+	@MockBean
 	private GarbageService service;
 
-	@InjectMocks
-	private GarbageResource resource;
+	@Autowired
+	private WebTestClient webTestClient;
 
 	@Test
 	void getGarbage() {
 		final var response = buildGarbageScheduleResponse();
 		final var request = buildGarbageScheduleRequest();
+
 		when(service.getGarbageSchedules(any())).thenReturn(response);
 
-		final var result = resource.getGarbage(request);
+		final var result = webTestClient.get()
+			.uri("/schedules?street=%s&postalCode=%s&houseNumber=%s&city=%s".formatted(request.getStreet(), request.getPostalCode(), request.getHouseNumber(), request.getCity()))
+			.exchange()
+			.expectStatus()
+			.isOk()
+			.expectBodyList(GarbageScheduleResponse.class)
+			.returnResult()
+			.getResponseBody();
 
 		assertThat(result).isNotNull();
-		assertThat(result.getStatusCode().is2xxSuccessful()).isTrue();
-		assertThat(result.getBody()).isNotNull();
 		assertThat(request.getPage()).isEqualTo(1);
 		assertThat(request.getLimit()).isEqualTo(10);
 
-		final var resultBody = result.getBody().get(0);
-		assertThat(resultBody.getAdditionalInformation()).isNull();
-		assertThat(resultBody.getGarbageScheduledWeek()).isEqualTo(GarbageScheduleResponse.Week.EVEN);
-		assertThat(resultBody.getGarbageScheduledDay()).isEqualTo(GarbageScheduleResponse.WeekDay.TUESDAY);
-		assertThat(resultBody.getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
-		assertThat(resultBody.getAddress().getStreet()).isEqualTo(request.getStreet());
-		assertThat(resultBody.getAddress().getPostalCode()).isEqualTo(request.getPostalCode());
-		assertThat(resultBody.getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
-		assertThat(resultBody.getAddress().getCity()).isEqualTo(request.getCity());
+		final var firstResult = result.getFirst();
+		assertThat(firstResult.getAdditionalInformation()).isNull();
+		assertThat(firstResult.getGarbageScheduledWeek()).isEqualTo(Week.EVEN);
+		assertThat(firstResult.getGarbageScheduledDay()).isEqualTo(WeekDay.TUESDAY);
+		assertThat(firstResult.getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
+		assertThat(firstResult.getAddress().getStreet()).isEqualTo(request.getStreet());
+		assertThat(firstResult.getAddress().getPostalCode()).isEqualTo(request.getPostalCode());
+		assertThat(firstResult.getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
+		assertThat(firstResult.getAddress().getCity()).isEqualTo(request.getCity());
 
 		verify(service, times(1)).getGarbageSchedules(any());
 		verifyNoMoreInteractions(service);
 
 	}
+
 }

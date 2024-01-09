@@ -1,5 +1,4 @@
-package se.sundsvall.garbage.api.model;
-
+package se.sundsvall.garbage.integration.db.entity;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
@@ -12,11 +11,13 @@ import static org.hamcrest.CoreMatchers.allOf;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-class GarbageScheduleRequestTest {
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+
+class GarbageScheduleEntityTest {
 
 	@Test
 	void testBean() {
-		MatcherAssert.assertThat(GarbageScheduleRequest.class, allOf(
+		MatcherAssert.assertThat(GarbageScheduleEntity.class, allOf(
 			hasValidBeanConstructor(),
 			hasValidGettersAndSetters(),
 			hasValidBeanHashCode(),
@@ -28,41 +29,45 @@ class GarbageScheduleRequestTest {
 	void testBuilderMethods() {
 
 		// Arrange
+		final var id = 1L;
 		final var street = "Testgatan";
 		final var houseNumber = "12";
 		final var postalCode = "85731";
 		final var city = "Sundsvall";
 		final var additionalInformation = "A";
-		final var page = 1;
-		final var limit = 10;
-
-
+		final var facilityCategory = FacilityCategory.VILLA;
+		final var driveSchedule = "KM021";
+		
 		// Act
-		final var request = GarbageScheduleRequest.builder()
+		final var request = GarbageScheduleEntity.builder()
+			.withId(id)
 			.withStreet(street)
 			.withHouseNumber(houseNumber)
 			.withPostalCode(postalCode)
 			.withCity(city)
 			.withAdditionalInformation(additionalInformation)
-			.withPage(page)
-			.withLimit(limit)
+			.withFacilityCategory(facilityCategory)
+			.withDriveSchedule(driveSchedule)
 			.build();
 
 		// Assert
-		assertThat(request.getPage()).isEqualTo(page);
-		assertThat(request.getLimit()).isEqualTo(limit);
+		assertThat(request).isNotNull().hasNoNullFieldsOrProperties();
+		assertThat(request.getId()).isEqualTo(id);
 		assertThat(request.getStreet()).isEqualTo(street);
 		assertThat(request.getPostalCode()).isEqualTo(postalCode);
 		assertThat(request.getCity()).isEqualTo(city);
 		assertThat(request.getAdditionalInformation()).isEqualTo(additionalInformation);
 		assertThat(request.getHouseNumber()).isEqualTo(houseNumber);
+		assertThat(request.getFacilityCategory()).isEqualTo(facilityCategory);
+		assertThat(request.getDriveSchedule()).isEqualTo(driveSchedule);
 
 	}
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		assertThat(GarbageScheduleRequest.builder().build()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
-		assertThat(new GarbageScheduleRequest()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
+		assertThat(GarbageScheduleEntity.builder().build()).hasAllNullFieldsOrProperties();
+		assertThat(new GarbageScheduleEntity()).hasAllNullFieldsOrProperties();
 	}
+
 
 }
