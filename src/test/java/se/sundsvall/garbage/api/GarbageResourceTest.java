@@ -64,7 +64,7 @@ class GarbageResourceTest {
 		assertThat(firstResult.getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
 		assertThat(firstResult.getAddress().getCity()).isEqualTo(request.getCity());
 
-		verify(service, times(1)).getGarbageSchedules(any());
+		verify(service).getGarbageSchedules(any());
 		verifyNoMoreInteractions(service);
 
 	}

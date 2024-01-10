@@ -2,6 +2,7 @@ package se.sundsvall.garbage.api;
 
 import java.util.List;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -24,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping(value = "/schedules", produces = MediaType.APPLICATION_JSON_VALUE)
-@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = Problem.class)))
+@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(oneOf = {Problem.class, ConstraintViolation.class})))
 @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = Problem.class)))
 @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = Problem.class)))
 @Tag(name = "GarbageSchedule")
