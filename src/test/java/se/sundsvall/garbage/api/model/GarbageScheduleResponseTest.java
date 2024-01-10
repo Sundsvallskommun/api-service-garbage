@@ -36,7 +36,7 @@ class GarbageScheduleResponseTest {
 		final var garbageScheduledWeek = Week.EVEN;
 
 		// Act
-		final var request = GarbageScheduleResponse.builder()
+		final var response = GarbageScheduleResponse.builder()
 			.withAddress(address)
 			.withAdditionalInformation(additionalInformation)
 			.withGarbageScheduledDay(garbageScheduledDay)
@@ -44,10 +44,10 @@ class GarbageScheduleResponseTest {
 			.build();
 
 		// Assert
-		assertThat(request.getGarbageScheduledWeek()).isEqualTo(garbageScheduledWeek);
-		assertThat(request.getGarbageScheduledDay()).isEqualTo(garbageScheduledDay);
-		assertThat(request.getAddress()).isEqualTo(address);
-		assertThat(request.getAdditionalInformation()).isEqualTo(additionalInformation);
+		assertThat(response.getGarbageScheduledWeek()).isEqualTo(garbageScheduledWeek);
+		assertThat(response.getGarbageScheduledDay()).isEqualTo(garbageScheduledDay);
+		assertThat(response.getAddress()).isEqualTo(address);
+		assertThat(response.getAdditionalInformation()).isEqualTo(additionalInformation);
 
 
 	}

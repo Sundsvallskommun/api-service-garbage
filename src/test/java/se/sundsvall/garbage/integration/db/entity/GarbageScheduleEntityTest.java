@@ -39,7 +39,7 @@ class GarbageScheduleEntityTest {
 		final var driveSchedule = "KM021";
 		
 		// Act
-		final var request = GarbageScheduleEntity.builder()
+		final var entity = GarbageScheduleEntity.builder()
 			.withId(id)
 			.withStreet(street)
 			.withHouseNumber(houseNumber)
@@ -51,15 +51,15 @@ class GarbageScheduleEntityTest {
 			.build();
 
 		// Assert
-		assertThat(request).isNotNull().hasNoNullFieldsOrProperties();
-		assertThat(request.getId()).isEqualTo(id);
-		assertThat(request.getStreet()).isEqualTo(street);
-		assertThat(request.getPostalCode()).isEqualTo(postalCode);
-		assertThat(request.getCity()).isEqualTo(city);
-		assertThat(request.getAdditionalInformation()).isEqualTo(additionalInformation);
-		assertThat(request.getHouseNumber()).isEqualTo(houseNumber);
-		assertThat(request.getFacilityCategory()).isEqualTo(facilityCategory);
-		assertThat(request.getDriveSchedule()).isEqualTo(driveSchedule);
+		assertThat(entity).isNotNull().hasNoNullFieldsOrProperties();
+		assertThat(entity.getId()).isEqualTo(id);
+		assertThat(entity.getStreet()).isEqualTo(street);
+		assertThat(entity.getPostalCode()).isEqualTo(postalCode);
+		assertThat(entity.getCity()).isEqualTo(city);
+		assertThat(entity.getAdditionalInformation()).isEqualTo(additionalInformation);
+		assertThat(entity.getHouseNumber()).isEqualTo(houseNumber);
+		assertThat(entity.getFacilityCategory()).isEqualTo(facilityCategory);
+		assertThat(entity.getDriveSchedule()).isEqualTo(driveSchedule);
 
 	}
 
