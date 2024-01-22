@@ -1,9 +1,11 @@
 package se.sundsvall.garbage.api;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+
 import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,7 +25,7 @@ import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
 import se.sundsvall.garbage.service.GarbageService;
 
 @RestController
-@RequestMapping(value = "/schedules", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/schedules")
 @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = Problem.class)))
 @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = Problem.class)))
@@ -36,14 +38,14 @@ public class GarbageResource {
 		this.garbageService = garbageService;
 	}
 
-	@GetMapping
+	@GetMapping(produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
 	@Operation(summary = "Get garbage schedule for an address")
 	@ApiResponse(responseCode = "200", description = "Successful Operation", useReturnTypeSchema = true)
 	public ResponseEntity<List<GarbageScheduleResponse>> getGarbage(@ParameterObject @Valid final GarbageScheduleRequest request) {
 		return ResponseEntity.ok(garbageService.getGarbageSchedules(request));
 	}
 
-	@PutMapping
+	@PutMapping(produces = APPLICATION_PROBLEM_JSON_VALUE)
 	@Operation(summary = "Update garbage schedules")
 	@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
 	public ResponseEntity<Void> updateGarbageSchedules() {
