@@ -85,7 +85,6 @@ class GarbageServiceTest {
 		verify(repository).saveAll(any());
 		verifyNoMoreInteractions(fileHandler);
 		verifyNoMoreInteractions(repository);
-
 	}
 
 }

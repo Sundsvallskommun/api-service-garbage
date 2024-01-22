@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>4.1</version>
+		<version>4.2.0</version>
 	</parent>
 	<groupId>se.sundsvall</groupId>
 	<artifactId>api-service-garbage</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>Garbage</name>
 	<properties>
 		<docker.image.name>ms-garbage</docker.image.name>
@@ -19,6 +19,7 @@
 		<published.container.port.production>9078</published.container.port.production>
 		<commons-vfs2.version>2.9.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
+		<shedlock.version>5.10.2</shedlock.version>
 	</properties>
 	<dependencies>
 		<!-- Dept44 Framework-->
@@ -67,6 +68,16 @@
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>${jsch.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-spring</artifactId>
+			<version>${shedlock.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-provider-jdbc-template</artifactId>
+			<version>${shedlock.version}</version>
 		</dependency>
 		<!-- Test -->
 		<dependency>

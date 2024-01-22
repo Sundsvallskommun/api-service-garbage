@@ -69,5 +69,4 @@ class GarbageScheduleEntityTest {
 		assertThat(new GarbageScheduleEntity()).hasAllNullFieldsOrProperties();
 	}
 
-
 }
