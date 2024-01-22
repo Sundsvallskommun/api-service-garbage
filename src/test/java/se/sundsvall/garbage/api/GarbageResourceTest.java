@@ -2,7 +2,6 @@ package se.sundsvall.garbage.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -66,7 +65,18 @@ class GarbageResourceTest {
 
 		verify(service).getGarbageSchedules(any());
 		verifyNoMoreInteractions(service);
-
 	}
 
+	@Test
+	void updateGarbageSchedules() {
+		webTestClient.put()
+			.uri("/schedules")
+			.exchange()
+			.expectStatus()
+			.isAccepted()
+			.expectBody().isEmpty();
+
+		verify(service).updateGarbageSchedules();
+		verifyNoMoreInteractions(service);
+	}
 }

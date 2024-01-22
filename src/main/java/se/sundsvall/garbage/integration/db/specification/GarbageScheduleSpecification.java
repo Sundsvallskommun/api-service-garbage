@@ -3,12 +3,11 @@ package se.sundsvall.garbage.integration.db.specification;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.criteria.Predicate;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.criteria.Predicate;
 import se.sundsvall.garbage.api.model.GarbageScheduleRequest;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity_;
@@ -20,7 +19,6 @@ public class GarbageScheduleSpecification {
 
 		return ((root, query, criteriaBuilder) -> {
 			final List<Predicate> predicates = new ArrayList<>();
-
 
 			if (StringUtils.isNotBlank(request.getAdditionalInformation())) {
 				predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.ADDITIONAL_INFORMATION),
@@ -40,8 +38,8 @@ public class GarbageScheduleSpecification {
 			if (StringUtils.isNotBlank(request.getCity())) {
 				predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.CITY), request.getCity()));
 			}
+
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 		});
 	}
-
 }

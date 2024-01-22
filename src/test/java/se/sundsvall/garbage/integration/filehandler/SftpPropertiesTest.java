@@ -20,12 +20,10 @@ class SftpPropertiesTest {
 
 	@Test
 	void verifyPropertiesAreSet() {
-
 		assertThat(properties.username()).isEqualTo("user");
 		assertThat(properties.password()).isEqualTo("password");
 		assertThat(properties.remoteHost()).isEqualTo("localhost");
 		assertThat(properties.filename()).isEqualTo("schedule.csv");
-		
 	}
 
 }

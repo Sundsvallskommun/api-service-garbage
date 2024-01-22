@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.sundsvall.garbage.api.model.GarbageScheduleRequest;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
@@ -16,7 +15,6 @@ import se.sundsvall.garbage.integration.filehandler.FileHandler;
 import se.sundsvall.garbage.service.mapper.Mapper;
 
 @Service
-@EnableScheduling
 public class GarbageService {
 
 	private final GarbageScheduleRepository repository;
@@ -38,16 +36,14 @@ public class GarbageService {
 			.toList();
 	}
 
-	@Scheduled(cron = "0 0 5 * * MON-FRI")
+	@Transactional
 	public void updateGarbageSchedules() {
 		fileHandler.downloadFile();
 		repository.deleteAllInBatch();
 		repository.saveAll(fileHandler.parseFile());
-
 	}
 
 	private Pageable getPagingParameters(final GarbageScheduleRequest request) {
 		return PageRequest.of(request.getPage() - 1, request.getLimit());
 	}
-
 }
