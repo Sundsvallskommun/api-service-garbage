@@ -48,8 +48,6 @@ class GarbageScheduleResponseTest {
 		assertThat(response.getGarbageScheduledDay()).isEqualTo(garbageScheduledDay);
 		assertThat(response.getAddress()).isEqualTo(address);
 		assertThat(response.getAdditionalInformation()).isEqualTo(additionalInformation);
-
-
 	}
 
 	@Test
@@ -57,6 +55,5 @@ class GarbageScheduleResponseTest {
 		assertThat(GarbageScheduleResponse.builder().build()).hasAllNullFieldsOrProperties();
 		assertThat(new GarbageScheduleResponse()).hasAllNullFieldsOrProperties();
 	}
-
 
 }

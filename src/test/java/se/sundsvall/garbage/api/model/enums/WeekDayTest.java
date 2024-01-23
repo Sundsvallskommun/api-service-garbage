@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 class WeekDayTest {
 
-
 	@Test
 	void testEnumValues() {
 		assertThat(WeekDay.values()).containsExactlyInAnyOrder(WeekDay.MONDAY, WeekDay.TUESDAY, WeekDay.WEDNESDAY, WeekDay.THURSDAY, WeekDay.FRIDAY);
