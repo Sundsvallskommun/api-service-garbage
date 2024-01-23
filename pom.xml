@@ -19,6 +19,7 @@
 		<published.container.port.production>9078</published.container.port.production>
 		<commons-vfs2.version>2.9.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
+		<okio.version>1.17.6</okio.version>
 		<shedlock.version>5.10.2</shedlock.version>
 	</properties>
 	<dependencies>
@@ -68,6 +69,11 @@
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>${jsch.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okio</groupId>
+			<artifactId>okio</artifactId>
+			<version>${okio.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.javacrumbs.shedlock</groupId>
