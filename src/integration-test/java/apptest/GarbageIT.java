@@ -7,9 +7,9 @@ import org.springframework.test.context.jdbc.Sql;
 
 import se.sundsvall.dept44.test.AbstractAppTest;
 import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
-import se.sundsvall.garbage.GarbageApplication;
+import se.sundsvall.garbage.Application;
 
-@WireMockAppTestSuite(files = "classpath:/GarbageIT/", classes = GarbageApplication.class)
+@WireMockAppTestSuite(files = "classpath:/GarbageIT/", classes = Application.class)
 @Sql({"/db/scripts/truncate.sql", "/db/scripts/testdata-it.sql"})
 class GarbageIT extends AbstractAppTest {
 

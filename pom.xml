@@ -98,7 +98,7 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>**/se/sundsvall/garbage/GarbageApplication*</exclude>
+						<exclude>**/se/sundsvall/garbage/Application*</exclude>
 						<exclude>
 							**/se/sundsvall/garbage/integration/db/entity/GarbageScheduleEntity_**
 						</exclude>

@@ -16,14 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import se.sundsvall.garbage.GarbageApplication;
+import se.sundsvall.garbage.Application;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
 import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.service.GarbageService;
 
-@SpringBootTest(classes = GarbageApplication.class, webEnvironment = RANDOM_PORT)
+@SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")
 class GarbageResourceTest {
 
