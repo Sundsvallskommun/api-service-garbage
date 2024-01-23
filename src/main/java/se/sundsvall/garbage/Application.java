@@ -8,10 +8,10 @@ import se.sundsvall.dept44.ServiceApplication;
 
 @ServiceApplication
 @EnableScheduling
-public class GarbageApplication {
+public class Application {
 
 	public static void main(final String... args) {
-		run(GarbageApplication.class, args);
+		run(Application.class, args);
 	}
 
 }
