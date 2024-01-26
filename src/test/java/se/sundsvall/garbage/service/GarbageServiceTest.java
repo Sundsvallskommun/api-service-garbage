@@ -86,6 +86,7 @@ class GarbageServiceTest {
 
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
+		verify(repository).count();
 		verify(repository).deleteAllInBatch();
 		verify(repository).saveAll(any());
 		verifyNoMoreInteractions(fileHandler);
@@ -99,6 +100,7 @@ class GarbageServiceTest {
 
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
+		verify(repository).count();
 		verify(repository).deleteAllInBatch();
 		verify(repository).saveAll(any());
 		verifyNoMoreInteractions(fileHandler);
