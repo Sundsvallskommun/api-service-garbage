@@ -49,7 +49,7 @@ public class GarbageResource {
 	@Operation(summary = "Update garbage schedules")
 	@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
 	public ResponseEntity<Void> updateGarbageSchedules() {
-		garbageService.updateGarbageSchedules();
+		garbageService.updateGarbageSchedulesAsynchronously();
 		return ResponseEntity.accepted().build();
 	}
 }

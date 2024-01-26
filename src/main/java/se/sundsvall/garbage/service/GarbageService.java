@@ -2,8 +2,11 @@ package se.sundsvall.garbage.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,7 @@ import se.sundsvall.garbage.service.mapper.Mapper;
 
 @Service
 public class GarbageService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GarbageService.class);
 
 	private final GarbageScheduleRepository repository;
 
@@ -36,11 +40,32 @@ public class GarbageService {
 			.toList();
 	}
 
+	@Async
+	@Transactional
+	public void updateGarbageSchedulesAsynchronously() {
+		performUpdate();
+	}
+
 	@Transactional
 	public void updateGarbageSchedules() {
-		fileHandler.downloadFile();
-		repository.deleteAllInBatch();
-		repository.saveAll(fileHandler.parseFile());
+		performUpdate();
+	}
+
+	private void performUpdate() {
+		try {
+			LOGGER.info("Start updating schedules");
+			LOGGER.info("Downloading file from server");
+			fileHandler.downloadFile();
+			LOGGER.info("Parsing file");
+			final var entities = fileHandler.parseFile();
+			LOGGER.info("Replacing {} existing entries in database with {} entries", repository.count(), entities.size());
+			repository.deleteAllInBatch();
+			repository.saveAll(entities);
+		} catch (Exception e) {
+			LOGGER.info("Exception occurred when updating schedules", e);
+		} finally {
+			LOGGER.info("End updating schedules");
+		}
 	}
 
 	private Pageable getPagingParameters(final GarbageScheduleRequest request) {

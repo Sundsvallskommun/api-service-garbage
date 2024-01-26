@@ -9,7 +9,10 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleEntity;
 import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
@@ -75,6 +80,19 @@ class GarbageServiceTest {
 	}
 
 	@Test
+	void updateGarbageSchedulesAsynchronously() {
+
+		service.updateGarbageSchedulesAsynchronously();
+
+		verify(fileHandler).downloadFile();
+		verify(fileHandler).parseFile();
+		verify(repository).deleteAllInBatch();
+		verify(repository).saveAll(any());
+		verifyNoMoreInteractions(fileHandler);
+		verifyNoMoreInteractions(repository);
+	}
+
+	@Test
 	void updateGarbageSchedules() {
 
 		service.updateGarbageSchedules();
@@ -87,4 +105,28 @@ class GarbageServiceTest {
 		verifyNoMoreInteractions(repository);
 	}
 
+	@Test
+	void verifyAnnotations() {
+		final var methods = List.of(service.getClass().getDeclaredMethods());
+
+		assertThat(
+			methods.stream()
+				.filter(m -> "updateGarbageSchedules".equals(m.getName()))
+				.map(Method::getDeclaredAnnotations)
+				.map(List::of)
+				.flatMap(List::stream)
+				.map(Annotation::annotationType)
+				.toArray())
+					.containsExactlyInAnyOrder(Transactional.class);
+
+		assertThat(
+			methods.stream()
+				.filter(m -> "updateGarbageSchedulesAsynchronously".equals(m.getName()))
+				.map(Method::getDeclaredAnnotations)
+				.map(List::of)
+				.flatMap(List::stream)
+				.map(Annotation::annotationType)
+				.toArray())
+					.containsExactlyInAnyOrder(Transactional.class, Async.class);
+	}
 }
