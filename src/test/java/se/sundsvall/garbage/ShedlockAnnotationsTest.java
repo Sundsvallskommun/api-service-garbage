@@ -1,4 +1,4 @@
-package se.sundsvall.garbage.configuration;
+package se.sundsvall.garbage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -20,12 +20,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
-class ShedlockUsageTest {
+class ShedlockAnnotationsTest {
 
 	@Test
 	void verifyMandatorySchedlockAnnotations() {
 		final var scanner = new ClassPathScanningCandidateComponentProvider(true);
-		final var candidates = scanner.findCandidateComponents("se.sundsvall.webmessagecollector");
+		final var candidates = scanner.findCandidateComponents(this.getClass().getPackageName());
 		final var hasEnableSchedulerLock = hasEnableSchedulerLock(candidates);
 
 		candidates.stream()
