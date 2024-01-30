@@ -54,9 +54,7 @@ public class GarbageService {
 	private void performUpdate() {
 		try {
 			LOGGER.info("Start updating schedules");
-			LOGGER.info("Downloading file from server");
 			fileHandler.downloadFile();
-			LOGGER.info("Parsing file");
 			final var entities = fileHandler.parseFile();
 			LOGGER.info("Replacing {} existing entries in database with {} entries", repository.count(), entities.size());
 			repository.deleteAllInBatch();
