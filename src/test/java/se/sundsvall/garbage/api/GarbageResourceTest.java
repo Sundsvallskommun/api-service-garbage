@@ -76,7 +76,7 @@ class GarbageResourceTest {
 			.isAccepted()
 			.expectBody().isEmpty();
 
-		verify(service).updateGarbageSchedules();
+		verify(service).updateGarbageSchedulesAsynchronously();
 		verifyNoMoreInteractions(service);
 	}
 }

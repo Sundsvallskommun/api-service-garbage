@@ -1,5 +1,7 @@
 package se.sundsvall.garbage.api;
 
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
@@ -49,7 +51,7 @@ public class GarbageResource {
 	@Operation(summary = "Update garbage schedules")
 	@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
 	public ResponseEntity<Void> updateGarbageSchedules() {
-		garbageService.updateGarbageSchedules();
-		return ResponseEntity.accepted().build();
+		garbageService.updateGarbageSchedulesAsynchronously();
+		return ResponseEntity.accepted().header(CONTENT_TYPE, ALL_VALUE).build();
 	}
 }
