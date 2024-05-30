@@ -13,10 +13,7 @@
 	<version>1.1</version>
 	<name>Garbage</name>
 	<properties>
-		<docker.image.name>ms-garbage</docker.image.name>
 		<exposed.app.port>8080</exposed.app.port>
-		<published.container.port.test>9078</published.container.port.test>
-		<published.container.port.production>9078</published.container.port.production>
 		<commons-vfs2.version>2.9.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
 		<shedlock.version>5.13.0</shedlock.version>
