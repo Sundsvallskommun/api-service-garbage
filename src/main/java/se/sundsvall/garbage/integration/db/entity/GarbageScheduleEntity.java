@@ -27,6 +27,9 @@ public class GarbageScheduleEntity {
 	@Column(name = "id")
 	private Long id;
 
+	@Column(name = "municipality_id")
+	private String municipalityId;
+
 	@Column(name = "street")
 	private String street;
 

@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import se.sundsvall.garbage.Application;
+
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockProvider;
-import se.sundsvall.garbage.Application;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
@@ -36,4 +37,5 @@ class ShedlockConfigurationTest {
 
 		lock.get().unlock();
 	}
+
 }

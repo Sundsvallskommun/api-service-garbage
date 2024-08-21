@@ -16,7 +16,7 @@ class GarbageIT extends AbstractAppTest {
 	@Test
 	void test1_getGarbage() {
 		setupCall()
-			.withServicePath("/schedules")
+			.withServicePath("/2281/schedules")
 			.withHttpMethod(HttpMethod.GET)
 			.withExpectedResponseStatus(HttpStatus.OK)
 			.withExpectedResponse("response.json")

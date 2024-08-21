@@ -2,6 +2,7 @@ package se.sundsvall.garbage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -57,13 +58,18 @@ class GarbageServiceTest {
 
 	@Test
 	void getGarbageSchedule() {
-		final var request = buildGarbageScheduleRequest();
 
-		when(garbageScheduleSpecification.createGarbageScheduleSpecification(any())).thenReturn(mockSpecification);
+		// Arrange
+		final var request = buildGarbageScheduleRequest();
+		final var municipalityId = "2281";
+
+		when(garbageScheduleSpecification.createGarbageScheduleSpecification(any(), eq(municipalityId))).thenReturn(mockSpecification);
 		when(repository.findAll(ArgumentMatchers.<Specification<GarbageScheduleEntity>>any(), any(Pageable.class))).thenReturn(garbageSchedulePage);
 
-		final var result = service.getGarbageSchedules(request);
+		// Act
+		final var result = service.getGarbageSchedules(municipalityId, request);
 
+		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result.getFirst().getGarbageScheduledDay()).isEqualTo(WeekDay.FRIDAY);
 		assertThat(result.getFirst().getGarbageScheduledWeek()).isEqualTo(Week.ODD);
@@ -81,9 +87,13 @@ class GarbageServiceTest {
 
 	@Test
 	void updateGarbageSchedulesAsynchronously() {
+		// Arrange
+		final var municipalityId = "2281";
 
-		service.updateGarbageSchedulesAsynchronously();
+		// Act
+		service.updateGarbageSchedulesAsynchronously(municipalityId);
 
+		// Assert
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
 		verify(repository).count();
@@ -95,9 +105,13 @@ class GarbageServiceTest {
 
 	@Test
 	void updateGarbageSchedules() {
+		// Arrange
+		final var municipalityId = "2281";
 
-		service.updateGarbageSchedules();
+		// Act
+		service.updateGarbageSchedules(municipalityId);
 
+		// Assert
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
 		verify(repository).count();
@@ -119,7 +133,7 @@ class GarbageServiceTest {
 				.flatMap(List::stream)
 				.map(Annotation::annotationType)
 				.toArray())
-					.containsExactlyInAnyOrder(Transactional.class);
+			.containsExactlyInAnyOrder(Transactional.class);
 
 		assertThat(
 			methods.stream()
@@ -129,6 +143,7 @@ class GarbageServiceTest {
 				.flatMap(List::stream)
 				.map(Annotation::annotationType)
 				.toArray())
-					.containsExactlyInAnyOrder(Transactional.class, Async.class);
+			.containsExactlyInAnyOrder(Transactional.class, Async.class);
 	}
+
 }

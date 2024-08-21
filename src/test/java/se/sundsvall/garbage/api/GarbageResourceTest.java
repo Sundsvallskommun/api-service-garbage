@@ -2,6 +2,7 @@ package se.sundsvall.garbage.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -37,11 +38,13 @@ class GarbageResourceTest {
 	void getGarbage() {
 		final var response = buildGarbageScheduleResponse();
 		final var request = buildGarbageScheduleRequest();
+		final var municipalityId = "2281";
 
-		when(service.getGarbageSchedules(any())).thenReturn(response);
+
+		when(service.getGarbageSchedules(eq(municipalityId), any())).thenReturn(response);
 
 		final var result = webTestClient.get()
-			.uri("/schedules?street=%s&postalCode=%s&houseNumber=%s&city=%s".formatted(request.getStreet(), request.getPostalCode(), request.getHouseNumber(), request.getCity()))
+			.uri("/" + municipalityId + "/schedules?street=%s&postalCode=%s&houseNumber=%s&city=%s".formatted(request.getStreet(), request.getPostalCode(), request.getHouseNumber(), request.getCity()))
 			.exchange()
 			.expectStatus()
 			.isOk()
@@ -63,20 +66,23 @@ class GarbageResourceTest {
 		assertThat(firstResult.getAddress().getHouseNumber()).isEqualTo(request.getHouseNumber());
 		assertThat(firstResult.getAddress().getCity()).isEqualTo(request.getCity());
 
-		verify(service).getGarbageSchedules(any());
+		verify(service).getGarbageSchedules(eq(municipalityId), any());
 		verifyNoMoreInteractions(service);
 	}
 
 	@Test
 	void updateGarbageSchedules() {
+		final var municipalityId = "2281";
+
 		webTestClient.put()
-			.uri("/schedules")
+			.uri("/" + municipalityId + "/schedules")
 			.exchange()
 			.expectStatus()
 			.isAccepted()
 			.expectBody().isEmpty();
 
-		verify(service).updateGarbageSchedulesAsynchronously();
+		verify(service).updateGarbageSchedulesAsynchronously(municipalityId);
 		verifyNoMoreInteractions(service);
 	}
+
 }
