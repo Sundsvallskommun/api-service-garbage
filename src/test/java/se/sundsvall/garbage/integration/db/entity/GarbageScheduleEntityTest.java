@@ -37,7 +37,8 @@ class GarbageScheduleEntityTest {
 		final var additionalInformation = "A";
 		final var facilityCategory = FacilityCategory.VILLA;
 		final var driveSchedule = "KM021";
-		
+		final var municipalityId = "2281";
+
 		// Act
 		final var entity = GarbageScheduleEntity.builder()
 			.withId(id)
@@ -48,6 +49,7 @@ class GarbageScheduleEntityTest {
 			.withAdditionalInformation(additionalInformation)
 			.withFacilityCategory(facilityCategory)
 			.withDriveSchedule(driveSchedule)
+			.withMunicipalityId(municipalityId)
 			.build();
 
 		// Assert
@@ -60,6 +62,7 @@ class GarbageScheduleEntityTest {
 		assertThat(entity.getHouseNumber()).isEqualTo(houseNumber);
 		assertThat(entity.getFacilityCategory()).isEqualTo(facilityCategory);
 		assertThat(entity.getDriveSchedule()).isEqualTo(driveSchedule);
+		assertThat(entity.getMunicipalityId()).isEqualTo(municipalityId);
 
 	}
 

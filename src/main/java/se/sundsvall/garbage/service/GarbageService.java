@@ -33,8 +33,8 @@ public class GarbageService {
 		this.garbageScheduleSpecification = garbageScheduleSpecification;
 	}
 
-	public List<GarbageScheduleResponse> getGarbageSchedules(final GarbageScheduleRequest request) {
-		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request), getPagingParameters(request))
+	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
+		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request,municipalityId), getPagingParameters(request))
 			.stream()
 			.map(Mapper::entityToResponse)
 			.toList();
@@ -42,24 +42,25 @@ public class GarbageService {
 
 	@Async
 	@Transactional
-	public void updateGarbageSchedulesAsynchronously() {
-		performUpdate();
+	public void updateGarbageSchedulesAsynchronously(final String municipalityId) {
+		performUpdate(municipalityId);
 	}
 
 	@Transactional
-	public void updateGarbageSchedules() {
-		performUpdate();
+	public void updateGarbageSchedules(final String municipalityId) {
+		performUpdate(municipalityId);
 	}
 
-	private void performUpdate() {
+	private void performUpdate(final String municipalityId) {
 		try {
 			LOGGER.info("Start updating schedules");
 			fileHandler.downloadFile();
 			final var entities = fileHandler.parseFile();
+			entities.forEach(entity -> entity.setMunicipalityId(municipalityId));
 			LOGGER.info("Replacing {} existing entries in database with {} entries", repository.count(), entities.size());
 			repository.deleteAllInBatch();
 			repository.saveAll(entities);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.info("Exception occurred when updating schedules", e);
 		} finally {
 			LOGGER.info("End updating schedules");

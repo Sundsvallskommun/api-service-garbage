@@ -15,10 +15,14 @@ import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity_;
 @Component
 public class GarbageScheduleSpecification {
 
-	public Specification<GarbageScheduleEntity> createGarbageScheduleSpecification(final GarbageScheduleRequest request) {
+	public Specification<GarbageScheduleEntity> createGarbageScheduleSpecification(final GarbageScheduleRequest request, final String municipalityId) {
 
 		return ((root, query, criteriaBuilder) -> {
 			final List<Predicate> predicates = new ArrayList<>();
+
+			if (StringUtils.isNotBlank(municipalityId)) {
+				predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.MUNICIPALITY_ID), municipalityId));
+			}
 
 			if (StringUtils.isNotBlank(request.getAdditionalInformation())) {
 				predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.ADDITIONAL_INFORMATION),

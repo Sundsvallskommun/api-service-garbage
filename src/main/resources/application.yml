@@ -24,7 +24,8 @@ spring:
     hikari:
       pool-name: garbage-pool
     type: com.zaxxer.hikari.HikariDataSource
-shedulers:
+schedulers:
   update-garbage-schedules:
+    municipality-ids: 2281
     cron: 0 0 5 * * MON-FRI
     shedlock-lock-at-most-for: PT2M
