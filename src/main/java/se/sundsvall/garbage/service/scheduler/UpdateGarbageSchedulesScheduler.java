@@ -15,7 +15,7 @@ public class UpdateGarbageSchedulesScheduler {
 
 	private final GarbageService garbageService;
 
-	@Value("#{'${schedulers.update-garbage-schedules.municipality-ids}'.split(',')}")
+	@Value("${schedulers.update-garbage-schedules.municipality-ids}")
 	private List<String> municipalityIds;
 
 	public UpdateGarbageSchedulesScheduler(final GarbageService garbageService) {

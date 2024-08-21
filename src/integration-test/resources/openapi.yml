@@ -1,0 +1,451 @@
+openapi: 3.0.1
+info:
+  title: Garbage
+  contact: { }
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+  - url: http://localhost:59255
+    description: Generated server url
+paths:
+  /{municipalityId}/schedules:
+    get:
+      tags:
+        - GarbageSchedule
+      summary: Get garbage schedule for an address
+      operationId: getGarbage
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: street
+          in: query
+          description: Address
+          required: false
+          schema:
+            type: string
+            description: Address
+            nullable: true
+            example: Testgatan
+          example: Testgatan
+        - name: houseNumber
+          in: query
+          description: Address
+          required: false
+          schema:
+            type: string
+            description: Address
+            nullable: true
+            example: 12
+          example: 12
+        - name: postalCode
+          in: query
+          description: Zipcode
+          required: false
+          schema:
+            type: string
+            description: Zipcode
+            nullable: true
+            example: 85731
+          example: 85731
+        - name: city
+          in: query
+          description: City
+          required: false
+          schema:
+            type: string
+            description: City
+            nullable: true
+            example: Sundsvall
+          example: Sundsvall
+        - name: additionalInformation
+          in: query
+          description: Any other identifier. Example HouseLetter or building clarification
+          required: false
+          schema:
+            type: string
+            description: Any other identifier. Example HouseLetter or building clarification
+            nullable: true
+            example: A
+          example: A
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            minimum: 1
+            type: string
+            description: Page number
+            example: 1
+            default: "1"
+          example: 1
+        - name: limit
+          in: query
+          description: Result size per page
+          required: false
+          schema:
+            maximum: 1000
+            minimum: 1
+            type: string
+            description: Result size per page
+            example: 100
+            default: "20"
+          example: 100
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GarbageScheduleResponse"
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GarbageScheduleResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+    put:
+      tags:
+        - GarbageSchedule
+      summary: Trigger a garbage schedule update
+      operationId: updateGarbageSchedules
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "202":
+          description: Successful Operation
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
+    StatusType:
+      type: object
+      properties:
+        reasonPhrase:
+          type: string
+        statusCode:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/ThrowableProblem"
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              methodName:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              className:
+                type: string
+              nativeMethod:
+                type: boolean
+        type:
+          type: string
+          format: uri
+        status:
+          $ref: "#/components/schemas/StatusType"
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        message:
+          type: string
+        instance:
+          type: string
+          format: uri
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+        detail:
+          type: string
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    methodName:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    className:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+              message:
+                type: string
+              localizedMessage:
+                type: string
+        localizedMessage:
+          type: string
+    ThrowableProblem:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/ThrowableProblem"
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              methodName:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              className:
+                type: string
+              nativeMethod:
+                type: boolean
+        message:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    methodName:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    className:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+              message:
+                type: string
+              localizedMessage:
+                type: string
+        localizedMessage:
+          type: string
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Address:
+      required:
+        - houseNumber
+        - postalCode
+        - street
+      type: object
+      properties:
+        street:
+          type: string
+          description: Address
+          example: Testgatan
+        houseNumber:
+          type: string
+          description: Address
+          example: "12"
+        postalCode:
+          type: string
+          description: Zipcode
+          example: "85731"
+        city:
+          type: string
+          description: City
+          nullable: true
+          example: Sundsvall
+      description: Address
+    GarbageScheduleResponse:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        additionalInformation:
+          type: string
+          description: Any other identifier. Example HouseLetter or building clarification
+          example: A
+        garbageScheduledDay:
+          type: string
+          description: 'What weekday garbage is collected '
+          example: MONDAY
+          enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+        garbageScheduledWeek:
+          type: string
+          description: 'What week garbage is collected. Odd/even numbers '
+          example: ODD
+          enum:
+            - ODD
+            - EVEN
+        facilityCategory:
+          type: string
+          description: 'Which type of facility '
+          example: VILLA
+          enum:
+            - VILLA
+            - FRITIDSHUS
+  securitySchemes: { }
