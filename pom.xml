@@ -16,7 +16,7 @@
 		<exposed.app.port>8080</exposed.app.port>
 		<commons-vfs2.version>2.9.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
-		<shedlock.version>5.15.0</shedlock.version>
+		<shedlock.version>5.15.1</shedlock.version>
 	</properties>
 	<dependencies>
 		<!-- Dept44 Framework-->
