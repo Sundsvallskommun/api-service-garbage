@@ -40,7 +40,6 @@ class GarbageResourceTest {
 		final var request = buildGarbageScheduleRequest();
 		final var municipalityId = "2281";
 
-
 		when(service.getGarbageSchedules(eq(municipalityId), any())).thenReturn(response);
 
 		final var result = webTestClient.get()

@@ -26,7 +26,7 @@ public class GarbageService {
 	private final FileHandler fileHandler;
 
 	private final GarbageScheduleSpecification garbageScheduleSpecification;
-	
+
 	public GarbageService(final GarbageScheduleRepository repository, final FileHandler fileHandler, final GarbageScheduleSpecification garbageScheduleSpecification) {
 		this.repository = repository;
 		this.fileHandler = fileHandler;
@@ -34,7 +34,7 @@ public class GarbageService {
 	}
 
 	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
-		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request,municipalityId), getPagingParameters(request))
+		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId), getPagingParameters(request))
 			.stream()
 			.map(Mapper::entityToResponse)
 			.toList();

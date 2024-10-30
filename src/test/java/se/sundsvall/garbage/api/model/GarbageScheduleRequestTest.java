@@ -1,6 +1,5 @@
 package se.sundsvall.garbage.api.model;
 
-
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
@@ -35,7 +34,6 @@ class GarbageScheduleRequestTest {
 		final var additionalInformation = "A";
 		final var page = 1;
 		final var limit = 10;
-
 
 		// Act
 		final var request = GarbageScheduleRequest.builder()

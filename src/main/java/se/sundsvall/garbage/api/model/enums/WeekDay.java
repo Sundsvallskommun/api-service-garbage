@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import lombok.AllArgsConstructor;
 
-
 @AllArgsConstructor
 public enum WeekDay {
 	MONDAY("MÅ"),

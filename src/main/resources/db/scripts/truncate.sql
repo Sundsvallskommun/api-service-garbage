@@ -1,3 +1,7 @@
-SET FOREIGN_KEY_CHECKS = 0;
-truncate table garbageschedule;
-SET FOREIGN_KEY_CHECKS = 1;
+SET
+FOREIGN_KEY_CHECKS = 0;
+
+truncate TABLE
+    garbageschedule;
+SET
+FOREIGN_KEY_CHECKS = 1;
