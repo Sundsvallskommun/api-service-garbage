@@ -22,7 +22,7 @@ public class GarbageScheduleSpecification {
 			final List<Predicate> predicates = new ArrayList<>();
 
 			predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.MUNICIPALITY_ID), municipalityId));
-			
+
 			if (StringUtils.isNotBlank(request.getAdditionalInformation())) {
 				predicates.add(criteriaBuilder.equal(root.get(GarbageScheduleEntity_.ADDITIONAL_INFORMATION),
 					request.getAdditionalInformation()));

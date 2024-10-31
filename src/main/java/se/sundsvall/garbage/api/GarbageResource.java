@@ -32,7 +32,9 @@ import se.sundsvall.garbage.service.GarbageService;
 
 @RestController
 @RequestMapping(value = "/{municipalityId}/schedules")
-@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
+@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(oneOf = {
+	Problem.class, ConstraintViolationProblem.class
+})))
 @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = Problem.class)))
 @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = Problem.class)))
 @Tag(name = "GarbageSchedule")
@@ -44,13 +46,15 @@ public class GarbageResource {
 		this.garbageService = garbageService;
 	}
 
-	@GetMapping(produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
+	@GetMapping(produces = {
+		APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE
+	})
 	@Operation(summary = "Get garbage schedule for an address")
 	@ApiResponse(responseCode = "200", description = "Successful Operation", useReturnTypeSchema = true)
 	public ResponseEntity<List<GarbageScheduleResponse>> getGarbage(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @ValidMunicipalityId @PathVariable final String municipalityId,
 		@ParameterObject @Valid final GarbageScheduleRequest request) {
-		return ResponseEntity.ok(garbageService.getGarbageSchedules(municipalityId,request));
+		return ResponseEntity.ok(garbageService.getGarbageSchedules(municipalityId, request));
 	}
 
 	@PutMapping(produces = APPLICATION_PROBLEM_JSON_VALUE)

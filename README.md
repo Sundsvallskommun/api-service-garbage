@@ -19,7 +19,6 @@ _Provides information on when garbage collection takes place at a specific addre
    ```bash
    git clone git@github.com:Sundsvallskommun/api-service-garbage.git
    ```
-
 2. **Configure the application:**
 
    Before running the application, you need to set up configuration settings.
@@ -33,14 +32,13 @@ _Provides information on when garbage collection takes place at a specific addre
 
 4. **Build and run the application:**
 
-     ```bash
-     mvn spring-boot:run
-     ```
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ## Dependencies
 
 - **SFTP Server**
-
   - **Purpose:** The service relies on an SFTP server to find the `schedule.csv` file to populate the database with.
   - **Setup Instructions:** Refer to [Configuration](#configuration) for instructions on how to configure this application to talk to your SFTP server.
 
@@ -80,7 +78,6 @@ Configuration is crucial for the application to run successfully. Ensure all nec
   server:
     port: 8080
   ```
-
 - **Database Settings:**
 
   ```yaml
@@ -90,7 +87,6 @@ Configuration is crucial for the application to run successfully. Ensure all nec
       username: your_db_username
       password: your_db_password
   ```
-
 - **Scheduler Settings:**
 
   ```yaml
@@ -100,9 +96,9 @@ Configuration is crucial for the application to run successfully. Ensure all nec
       cron: 0 0 5 * * MON-FRI
       shedlock-lock-at-most-for: PT2M
   ```
+
   - **Municipality-ids:** a list for which municipalityIds to run the scheduled job for. Will use the same SFTP settings for each one.
   - **Cron:** When scheduled job should run. Use `"-"`to disable.
-
 - **SFTP settings:**
 
   ```yaml

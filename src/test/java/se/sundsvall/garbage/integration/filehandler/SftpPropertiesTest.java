@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import se.sundsvall.garbage.Application;
 
-
 @SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")
 class SftpPropertiesTest {

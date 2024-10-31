@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
@@ -28,7 +27,8 @@ public class GarbageScheduleRequest {
 	private String city;
 
 	@Schema(description = "Any other identifier. Example HouseLetter or building clarification",
-		example = "A", nullable = true)
+		example = "A",
+		nullable = true)
 	private String additionalInformation;
 
 	@Builder.Default
