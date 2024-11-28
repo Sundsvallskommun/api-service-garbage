@@ -11,7 +11,6 @@
 	<version>2.0</version>
 	<name>Garbage</name>
 	<properties>
-		<exposed.app.port>8080</exposed.app.port>
 		<commons-vfs2.version>2.9.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
 		<shedlock.version>6.0.1</shedlock.version>
