@@ -1,7 +1,6 @@
 package se.sundsvall.garbage.api.model.enums;
 
 import java.util.Arrays;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
