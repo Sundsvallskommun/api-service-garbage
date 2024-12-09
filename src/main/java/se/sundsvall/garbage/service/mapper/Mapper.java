@@ -1,7 +1,6 @@
 package se.sundsvall.garbage.service.mapper;
 
 import java.util.Optional;
-
 import se.sundsvall.garbage.api.model.Address;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
 import se.sundsvall.garbage.api.model.enums.Week;

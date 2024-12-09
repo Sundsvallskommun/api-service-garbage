@@ -1,14 +1,11 @@
 package se.sundsvall.garbage.integration.db.specification;
 
+import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.criteria.Predicate;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
 import se.sundsvall.garbage.api.model.GarbageScheduleRequest;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity_;

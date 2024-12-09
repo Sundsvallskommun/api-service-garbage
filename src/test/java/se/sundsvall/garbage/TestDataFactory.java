@@ -1,7 +1,6 @@
 package se.sundsvall.garbage;
 
 import java.util.List;
-
 import se.sundsvall.garbage.api.model.Address;
 import se.sundsvall.garbage.api.model.GarbageScheduleRequest;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
