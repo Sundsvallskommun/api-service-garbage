@@ -27,7 +27,7 @@ import se.sundsvall.garbage.service.GarbageService;
 @ActiveProfiles("junit")
 class GarbageResourceTest {
 
-	@MockBean
+	@MockitoBean
 	private GarbageService service;
 
 	@Autowired
