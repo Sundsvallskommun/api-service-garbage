@@ -42,7 +42,7 @@ paths:
             type: string
             description: Address
             nullable: true
-            example: 12
+            example: "12"
           example: 12
         - name: postalCode
           in: query
@@ -52,7 +52,7 @@ paths:
             type: string
             description: Zipcode
             nullable: true
-            example: 85731
+            example: "85731"
           example: 85731
         - name: city
           in: query
@@ -80,10 +80,11 @@ paths:
           required: false
           schema:
             minimum: 1
-            type: string
+            type: integer
             description: Page number
+            format: int32
             example: 1
-            default: "1"
+            default: 1
           example: 1
         - name: limit
           in: query
@@ -92,10 +93,11 @@ paths:
           schema:
             maximum: 1000
             minimum: 1
-            type: string
+            type: integer
             description: Result size per page
+            format: int32
             example: 100
-            default: "20"
+            default: 20
           example: 100
       responses:
         "500":
@@ -218,11 +220,11 @@ components:
     StatusType:
       type: object
       properties:
-        reasonPhrase:
-          type: string
         statusCode:
           type: integer
           format: int32
+        reasonPhrase:
+          type: string
     ConstraintViolationProblem:
       type: object
       properties:
