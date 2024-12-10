@@ -1,15 +1,14 @@
 package se.sundsvall.garbage.api.model;
 
-import se.sundsvall.garbage.api.model.enums.FacilityCategory;
-import se.sundsvall.garbage.api.model.enums.Week;
-import se.sundsvall.garbage.api.model.enums.WeekDay;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.Week;
+import se.sundsvall.garbage.api.model.enums.WeekDay;
 
 @Data
 @Builder(setterPrefix = "with")
