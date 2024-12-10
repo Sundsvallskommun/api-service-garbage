@@ -10,7 +10,6 @@ import static org.hamcrest.CoreMatchers.allOf;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
-
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 
 class GarbageScheduleEntityTest {
