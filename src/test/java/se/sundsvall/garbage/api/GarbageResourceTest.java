@@ -13,7 +13,7 @@ import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -28,7 +28,7 @@ import se.sundsvall.garbage.service.GarbageService;
 @ActiveProfiles("junit")
 class GarbageResourceTest {
 
-	@MockBean
+	@MockitoBean
 	private GarbageService service;
 
 	@Autowired
