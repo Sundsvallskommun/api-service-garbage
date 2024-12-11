@@ -46,8 +46,10 @@ public class GarbageResource {
 	@GetMapping(produces = {
 		APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE
 	})
-	@Operation(summary = "Get garbage schedule for an address")
-	@ApiResponse(responseCode = "200", description = "Successful Operation", useReturnTypeSchema = true)
+	@Operation(summary = "Get garbage schedule for an address",
+		responses = {
+			@ApiResponse(responseCode = "200", description = "Successful Operation", useReturnTypeSchema = true)
+		})
 	public ResponseEntity<List<GarbageScheduleResponse>> getGarbage(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @ValidMunicipalityId @PathVariable final String municipalityId,
 		@ParameterObject @Valid final GarbageScheduleRequest request) {
@@ -55,8 +57,9 @@ public class GarbageResource {
 	}
 
 	@PutMapping(produces = APPLICATION_PROBLEM_JSON_VALUE)
-	@Operation(summary = "Trigger a garbage schedule update")
-	@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
+	@Operation(summary = "Trigger a garbage schedule update", responses = {
+		@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
+	})
 	public ResponseEntity<Void> updateGarbageSchedules(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @ValidMunicipalityId @PathVariable final String municipalityId) {
 		garbageService.updateGarbageSchedulesAsynchronously(municipalityId);
