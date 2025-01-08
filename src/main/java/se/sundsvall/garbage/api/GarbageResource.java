@@ -3,7 +3,6 @@ package se.sundsvall.garbage.api;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,9 +42,7 @@ public class GarbageResource {
 		this.garbageService = garbageService;
 	}
 
-	@GetMapping(produces = {
-		APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE
-	})
+	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	@Operation(summary = "Get garbage schedule for an address",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "Successful Operation", useReturnTypeSchema = true)
@@ -56,7 +53,7 @@ public class GarbageResource {
 		return ResponseEntity.ok(garbageService.getGarbageSchedules(municipalityId, request));
 	}
 
-	@PutMapping(produces = APPLICATION_PROBLEM_JSON_VALUE)
+	@PutMapping(produces = ALL_VALUE)
 	@Operation(summary = "Trigger a garbage schedule update", responses = {
 		@ApiResponse(responseCode = "202", description = "Successful Operation", useReturnTypeSchema = true)
 	})

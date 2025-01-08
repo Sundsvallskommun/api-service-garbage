@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: "2.0"
 servers:
-  - url: http://localhost:59255
+  - url: http://localhost:60586
     description: Generated server url
 paths:
   /{municipalityId}/schedules:
@@ -100,24 +100,6 @@ paths:
             default: 20
           example: 100
       responses:
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
         "200":
           description: Successful Operation
           content:
@@ -126,20 +108,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/GarbageScheduleResponse"
-            application/problem+json:
+        "404":
+          description: Not Found
+          content:
+            application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/GarbageScheduleResponse"
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad Request
           content:
             application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
-            application/problem+json:
               schema:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
@@ -158,24 +142,24 @@ paths:
             type: string
           example: 2281
       responses:
-        "500":
-          description: Internal Server Error
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
+        "202":
+          description: Successful Operation
         "404":
           description: Not Found
           content:
-            application/problem+json:
+            '*/*':
               schema:
                 $ref: "#/components/schemas/Problem"
-        "202":
-          description: Successful Operation
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad Request
           content:
-            application/problem+json:
+            '*/*':
               schema:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
