@@ -14,6 +14,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
+import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
 import se.sundsvall.garbage.api.model.enums.WeekDay;
@@ -43,6 +45,9 @@ class GarbageServiceTest {
 	private Specification<GarbageScheduleEntity> mockSpecification;
 
 	@Mock
+	private Dept44HealthUtility dept44HealthUtility;
+
+	@Mock
 	private GarbageScheduleRepository repository;
 
 	@Mock
@@ -53,6 +58,14 @@ class GarbageServiceTest {
 
 	@InjectMocks
 	private GarbageService service;
+
+	@BeforeEach
+	void setUp() throws NoSuchFieldException, IllegalAccessException {
+
+		final var field = GarbageService.class.getDeclaredField("scheduledJobName");
+		field.setAccessible(true);
+		field.set(service, "scheduledJobName");
+	}
 
 	@Test
 	void getGarbageSchedule() {
@@ -87,6 +100,7 @@ class GarbageServiceTest {
 	void updateGarbageSchedulesAsynchronously() {
 		// Arrange
 		final var municipalityId = "2281";
+		when(fileHandler.parseFile()).thenReturn(List.of(GarbageScheduleEntity.builder().build()));
 
 		// Act
 		service.updateGarbageSchedulesAsynchronously(municipalityId);
@@ -105,6 +119,7 @@ class GarbageServiceTest {
 	void updateGarbageSchedules() {
 		// Arrange
 		final var municipalityId = "2281";
+		when(fileHandler.parseFile()).thenReturn(List.of(GarbageScheduleEntity.builder().build()));
 
 		// Act
 		service.updateGarbageSchedules(municipalityId);
@@ -142,6 +157,40 @@ class GarbageServiceTest {
 				.map(Annotation::annotationType)
 				.toArray())
 			.containsExactlyInAnyOrder(Transactional.class, Async.class);
+	}
+
+	@Test
+	void updateGarbageSchedulesAsynchronously_exceptionThrown() {
+		// Arrange
+		final var municipalityId = "2281";
+		when(fileHandler.parseFile()).thenThrow(new RuntimeException("Test exception"));
+
+		// Act
+		service.updateGarbageSchedulesAsynchronously(municipalityId);
+
+		// Assert
+		verify(fileHandler).downloadFile();
+		verify(fileHandler).parseFile();
+		verify(dept44HealthUtility).setHealthIndicatorUnhealthy(eq("scheduledJobName"), eq("Could not complete update of garbage schedules"));
+		verifyNoMoreInteractions(fileHandler);
+		verifyNoMoreInteractions(repository);
+	}
+
+	@Test
+	void updateGarbageSchedulesAsynchronously_entitiesEmpty() {
+		// Arrange
+		final var municipalityId = "2281";
+		when(fileHandler.parseFile()).thenReturn(Collections.emptyList());
+
+		// Act
+		service.updateGarbageSchedulesAsynchronously(municipalityId);
+
+		// Assert
+		verify(fileHandler).downloadFile();
+		verify(fileHandler).parseFile();
+		verify(dept44HealthUtility).setHealthIndicatorUnhealthy(eq("scheduledJobName"), eq("Schedule file did not contain any rows"));
+		verifyNoMoreInteractions(fileHandler);
+		verifyNoMoreInteractions(repository);
 	}
 
 }
