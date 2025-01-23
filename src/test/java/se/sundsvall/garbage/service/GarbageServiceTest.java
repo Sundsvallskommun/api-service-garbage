@@ -160,7 +160,7 @@ class GarbageServiceTest {
 	}
 
 	@Test
-	void updateGarbageSchedulesAsynchronously_exceptionThrown() {
+	void updateGarbageSchedulesAsynchronouslyExceptionThrown() {
 		// Arrange
 		final var municipalityId = "2281";
 		when(fileHandler.parseFile()).thenThrow(new RuntimeException("Test exception"));
@@ -171,13 +171,13 @@ class GarbageServiceTest {
 		// Assert
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
-		verify(dept44HealthUtility).setHealthIndicatorUnhealthy(eq("scheduledJobName"), eq("Could not complete update of garbage schedules"));
+		verify(dept44HealthUtility).setHealthIndicatorUnhealthy("scheduledJobName", "Could not complete update of garbage schedules");
 		verifyNoMoreInteractions(fileHandler);
 		verifyNoMoreInteractions(repository);
 	}
 
 	@Test
-	void updateGarbageSchedulesAsynchronously_entitiesEmpty() {
+	void updateGarbageSchedulesAsynchronouslyEntitiesEmpty() {
 		// Arrange
 		final var municipalityId = "2281";
 		when(fileHandler.parseFile()).thenReturn(Collections.emptyList());
@@ -188,7 +188,7 @@ class GarbageServiceTest {
 		// Assert
 		verify(fileHandler).downloadFile();
 		verify(fileHandler).parseFile();
-		verify(dept44HealthUtility).setHealthIndicatorUnhealthy(eq("scheduledJobName"), eq("Schedule file did not contain any rows"));
+		verify(dept44HealthUtility).setHealthIndicatorUnhealthy("scheduledJobName", "Schedule file did not contain any rows");
 		verifyNoMoreInteractions(fileHandler);
 		verifyNoMoreInteractions(repository);
 	}
