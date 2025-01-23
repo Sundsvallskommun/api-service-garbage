@@ -27,5 +27,6 @@ spring:
 schedulers:
   update-garbage-schedules:
     municipality-ids: 2281
+    name: updateGarbageSchedules
     cron: 0 0 5 * * MON-FRI
     shedlock-lock-at-most-for: PT2M

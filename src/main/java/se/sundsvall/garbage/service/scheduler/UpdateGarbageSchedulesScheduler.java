@@ -1,10 +1,9 @@
 package se.sundsvall.garbage.service.scheduler;
 
 import java.util.List;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.garbage.service.GarbageService;
 
 @Service
@@ -19,8 +18,11 @@ public class UpdateGarbageSchedulesScheduler {
 		this.garbageService = garbageService;
 	}
 
-	@Scheduled(cron = "${schedulers.update-garbage-schedules.cron}")
-	@SchedulerLock(name = "updateGarbageSchedules", lockAtMostFor = "${schedulers.update-garbage-schedules.shedlock-lock-at-most-for}")
+	@Dept44Scheduled(
+		cron = "${schedulers.update-garbage-schedules.cron}",
+		name = "${schedulers.update-garbage-schedules.name}",
+		lockAtMostFor = "${schedulers.update-garbage-schedules.shedlock-lock-at-most-for}",
+		maximumExecutionTime = "${schedulers.update-garbage-schedules.maximum-execution-time}")
 	public void execute() {
 		municipalityIds.forEach(garbageService::updateGarbageSchedules);
 	}
