@@ -11,7 +11,7 @@
 	<version>2.0</version>
 	<name>Garbage</name>
 	<properties>
-		<commons-vfs2.version>2.9.0</commons-vfs2.version>
+		<commons-vfs2.version>2.10.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
 	</properties>
 	<dependencies>
