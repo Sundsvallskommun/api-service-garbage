@@ -57,7 +57,7 @@ public class FileHandler {
 
 		try (final MappingIterator<ParsedRow> it = csvMapper.readerFor(ParsedRow.class)
 			.with(schema)
-			.readValues(new FileReader(TEMP_FILE, StandardCharsets.ISO_8859_1))) {
+			.readValues(new FileReader(TEMP_FILE, StandardCharsets.UTF_8))) {
 			final var result = it.readAll().stream()
 				.filter(parsedRow -> !parsedRow.getDriveSchedule().startsWith("SL"))
 				.map(this::mapToEntity)
