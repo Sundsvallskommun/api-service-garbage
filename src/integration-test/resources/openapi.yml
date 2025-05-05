@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: "2.0"
 servers:
-  - url: http://localhost:59258
+  - url: http://localhost:65157
     description: Generated server url
 paths:
   /{municipalityId}/schedules:
@@ -204,11 +204,11 @@ components:
     StatusType:
       type: object
       properties:
+        reasonPhrase:
+          type: string
         statusCode:
           type: integer
           format: int32
-        reasonPhrase:
-          type: string
     ConstraintViolationProblem:
       type: object
       properties:
@@ -384,14 +384,17 @@ components:
       type: object
       properties:
         street:
+          minLength: 1
           type: string
           description: Address
           example: Testgatan
         houseNumber:
+          minLength: 1
           type: string
           description: Address
           example: "12"
         postalCode:
+          minLength: 1
           type: string
           description: Zipcode
           example: "85731"
