@@ -16,19 +16,21 @@ import lombok.NoArgsConstructor;
 public class Address {
 	@NotEmpty
 	@NotNull
-	@Schema(description = "Address", example = "Testgatan")
+	@Schema(description = "Address", examples = "Testgatan")
 	private String street;
 
 	@NotEmpty
 	@NotNull
-	@Schema(description = "Address", example = "12")
+	@Schema(description = "Address", examples = "12")
 	private String houseNumber;
 
 	@NotEmpty
 	@NotNull
-	@Schema(description = "Zipcode", example = "85731")
+	@Schema(description = "Zipcode", examples = "85731")
 	private String postalCode;
 
-	@Schema(description = "City", nullable = true, example = "Sundsvall")
+	@Schema(description = "City", types = {
+		"string", "null"
+	}, examples = "Sundsvall")
 	private String city;
 }

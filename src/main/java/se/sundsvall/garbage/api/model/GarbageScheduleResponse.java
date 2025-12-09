@@ -19,16 +19,16 @@ public class GarbageScheduleResponse {
 	@Schema(description = "Address")
 	private Address address;
 
-	@Schema(description = "Any other identifier. Example HouseLetter or building clarification", example = "A")
+	@Schema(description = "Any other identifier. Example HouseLetter or building clarification", examples = "A")
 	private String additionalInformation;
 
-	@Schema(description = "What weekday garbage is collected ", example = "MONDAY")
+	@Schema(description = "What weekday garbage is collected ", examples = "MONDAY")
 	private WeekDay garbageScheduledDay;
 
-	@Schema(description = "What week garbage is collected. Odd/even numbers ", example = "ODD")
+	@Schema(description = "What week garbage is collected. Odd/even numbers ", examples = "ODD")
 	private Week garbageScheduledWeek;
 
-	@Schema(description = "Which type of facility ", example = "VILLA")
+	@Schema(description = "Which type of facility ", examples = "VILLA")
 	private FacilityCategory facilityCategory;
 
 }

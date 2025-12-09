@@ -14,30 +14,38 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GarbageScheduleRequest {
 
-	@Schema(description = "Address", nullable = true, example = "Testgatan")
+	@Schema(description = "Address", types = {
+		"string", "null"
+	}, examples = "Testgatan")
 	private String street;
 
-	@Schema(description = "Address", nullable = true, example = "12")
+	@Schema(description = "Address", types = {
+		"string", "null"
+	}, examples = "12")
 	private String houseNumber;
 
-	@Schema(description = "Zipcode", nullable = true, example = "85731")
+	@Schema(description = "Zipcode", types = {
+		"string", "null"
+	}, examples = "85731")
 	private String postalCode;
 
-	@Schema(description = "City", nullable = true, example = "Sundsvall")
+	@Schema(description = "City", types = {
+		"string", "null"
+	}, example = "Sundsvall")
 	private String city;
 
-	@Schema(description = "Any other identifier. Example HouseLetter or building clarification",
-		example = "A",
-		nullable = true)
+	@Schema(description = "Any other identifier. Example HouseLetter or building clarification", examples = "A", types = {
+		"string", "null"
+	})
 	private String additionalInformation;
 
 	@Builder.Default
-	@Schema(description = "Page number", example = "1", defaultValue = "1")
+	@Schema(description = "Page number", examples = "1", defaultValue = "1")
 	@Min(1)
 	private int page = 1;
 
 	@Builder.Default
-	@Schema(description = "Result size per page", example = "100", defaultValue = "20")
+	@Schema(description = "Result size per page", examples = "100", defaultValue = "20")
 	@Min(1)
 	@Max(1000)
 	private int limit = 20;
