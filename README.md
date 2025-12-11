@@ -6,7 +6,7 @@ _Provides information on when garbage collection takes place at a specific addre
 
 ### Prerequisites
 
-- **Java 21 or higher**
+- **Java 25 or higher**
 - **Maven**
 - **MariaDB**
 - **Git**
