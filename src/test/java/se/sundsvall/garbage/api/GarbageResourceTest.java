@@ -1,15 +1,5 @@
 package se.sundsvall.garbage.api;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
-import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleResponse;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +12,16 @@ import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
 import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.service.GarbageService;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
+import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleResponse;
 
 @SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")
