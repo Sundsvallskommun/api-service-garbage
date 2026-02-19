@@ -1,10 +1,10 @@
 package se.sundsvall.garbage;
 
-import static org.springframework.boot.SpringApplication.run;
-
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import se.sundsvall.dept44.ServiceApplication;
+
+import static org.springframework.boot.SpringApplication.run;
 
 @ServiceApplication
 @EnableScheduling

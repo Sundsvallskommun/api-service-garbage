@@ -1,13 +1,13 @@
 package se.sundsvall.garbage.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import se.sundsvall.garbage.api.model.GarbageScheduleResponse;
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
 import se.sundsvall.garbage.api.model.enums.WeekDay;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MapperTest {
 

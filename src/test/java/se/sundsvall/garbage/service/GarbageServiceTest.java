@@ -1,15 +1,5 @@
 package se.sundsvall.garbage.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleEntity;
-import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -35,6 +25,16 @@ import se.sundsvall.garbage.integration.db.GarbageScheduleRepository;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
 import se.sundsvall.garbage.integration.db.specification.GarbageScheduleSpecification;
 import se.sundsvall.garbage.integration.filehandler.FileHandler;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleEntity;
+import static se.sundsvall.garbage.TestDataFactory.buildGarbageScheduleRequest;
 
 @ExtendWith(MockitoExtension.class)
 class GarbageServiceTest {
