@@ -1,8 +1,5 @@
 package se.sundsvall.garbage.integration.filehandler;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,6 +15,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.integration.db.entity.GarbageScheduleEntity;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.dataformat.csv.CsvMapper;
+import tools.jackson.dataformat.csv.CsvSchema;
 
 @Component
 @EnableConfigurationProperties(SftpProperties.class)
