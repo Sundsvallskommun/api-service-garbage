@@ -11,7 +11,6 @@
 	<version>2.0</version>
 	<name>Garbage</name>
 	<properties>
-		<jpa-modelgen.verison>7.2.5.Final</jpa-modelgen.verison>
 		<commons-vfs2.version>2.10.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
 	</properties>
@@ -45,7 +44,6 @@
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-processor</artifactId>
-			<version>${jpa-modelgen.verison}</version>
 		</dependency>
 		<!-- Other-->
 		<dependency>
