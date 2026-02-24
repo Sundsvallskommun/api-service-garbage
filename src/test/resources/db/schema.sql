@@ -1,6 +1,6 @@
 
     create table garbageschedule (
-        facilityCategory int(11) check (facilityCategory between 0 and 1),
+        facilityCategory int(11) check ((facilityCategory between 0 and 1)),
         id bigint not null auto_increment,
         additionalInformation varchar(255),
         city varchar(255),

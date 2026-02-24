@@ -4,13 +4,14 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>7.0.1</version>
+		<version>8.0.0</version>
 	</parent>
 	<groupId>se.sundsvall</groupId>
 	<artifactId>api-service-garbage</artifactId>
 	<version>2.0</version>
 	<name>Garbage</name>
 	<properties>
+		<jpa-modelgen.verison>7.2.5.Final</jpa-modelgen.verison>
 		<commons-vfs2.version>2.10.0</commons-vfs2.version>
 		<jsch.version>0.1.55</jsch.version>
 	</properties>
@@ -34,13 +35,17 @@
 			<artifactId>mariadb-java-client</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<scope>provided</scope>
+			<artifactId>hibernate-processor</artifactId>
+			<version>${jpa-modelgen.verison}</version>
 		</dependency>
 		<!-- Other-->
 		<dependency>
@@ -49,11 +54,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
+			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<groupId>tools.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-csv</artifactId>
 		</dependency>
 		<dependency>
