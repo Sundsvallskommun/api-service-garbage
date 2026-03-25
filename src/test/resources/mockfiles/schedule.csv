@@ -1,2 +1,4 @@
-Testgatan;12;;VI;357;KP50TI2;85185 ;Sundsvall
-Testgatan;8;;VI;357;KP50FR2;85185 ;Sundsvall
+1;2;3;Test Street 1;12345;Test City;Restavfall;2026-01-01 00:00:00;U11 TI2;SMÅHUS
+4;5;6;Test Road 18;23456;Test Town;Restavfall;2026-02-01 00:00:00;U14 FR2;SMÅHUS
+7;8;9;Test Road 20;23456;Test Town;Restavfall;2026-02-01 00:00:00;U14 FR2;SMÅHUS
+10;11;12;Test Avenue 4;34567;Test Village;Restavfall;2026-03-01 00:00:00;U14 FR2;SMÅHUS

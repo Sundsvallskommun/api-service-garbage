@@ -1,6 +1,18 @@
 INSERT
     INTO
-        garbageschedule
+        garbageschedule(
+            id,
+            facilityCategory,
+            additionalInformation,
+            city,
+            driveSchedule,
+            houseNumber,
+            postalCode,
+            street,
+            municipality_id,
+            wasteType,
+            nextPickupDate
+        )
     VALUES(
         1,
         1,
@@ -10,5 +22,7 @@ INSERT
         '2',
         '85731',
         'Testgatan',
-        '2281'
+        '2281',
+        'WASTE',
+        '2026-03-31'
     );

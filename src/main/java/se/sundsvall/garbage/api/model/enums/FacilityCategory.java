@@ -1,19 +1,23 @@
 package se.sundsvall.garbage.api.model.enums;
 
 import java.util.Arrays;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum FacilityCategory {
-	VILLA("VI"),
-	FRITIDSHUS("FH");
+	VILLA("SMÅHUS"),
+	FRITIDSHUS("FRIHUS");
 
-	final String shortCode;
+	private final String code;
 
-	public static FacilityCategory forValue(final String shortCode) {
+	FacilityCategory(final String code) {
+		this.code = code;
+	}
+
+	public static FacilityCategory forValue(final String code) {
+		if (code == null) {
+			return null;
+		}
 		return Arrays.stream(FacilityCategory.values())
-			.filter(facilityCategory -> facilityCategory.shortCode.equals(shortCode))
+			.filter(facilityCategory -> facilityCategory.code.equals(code))
 			.findFirst()
 			.orElse(null);
 	}

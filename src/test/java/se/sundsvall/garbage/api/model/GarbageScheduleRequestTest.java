@@ -59,8 +59,8 @@ class GarbageScheduleRequestTest {
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		assertThat(GarbageScheduleRequest.builder().build()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
-		assertThat(new GarbageScheduleRequest()).hasAllNullFieldsOrPropertiesExcept("page", "limit");
+		assertThat(GarbageScheduleRequest.builder().build()).hasAllNullFieldsOrProperties();
+		assertThat(new GarbageScheduleRequest()).hasAllNullFieldsOrProperties();
 	}
 
 }

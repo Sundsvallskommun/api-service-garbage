@@ -21,14 +21,13 @@ class UpdateGarbageSchedulesSchedulerTest {
 	private UpdateGarbageSchedulesScheduler scheduler;
 
 	@Test
-	void execute() {
+	void updateGarbageSchedules() {
 		// Arrange
-
 		ReflectionTestUtils.setField(scheduler, "municipalityIds", List.of("2281"));
 		final var municipalityId = "2281";
 
 		// Act
-		scheduler.execute();
+		scheduler.updateGarbageSchedules();
 
 		// Assert
 		verify(garbageServiceMock).updateGarbageSchedules(municipalityId);

@@ -1,6 +1,7 @@
 package se.sundsvall.garbage.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,5 +31,8 @@ public class GarbageScheduleResponse {
 
 	@Schema(description = "Which type of facility ", examples = "VILLA")
 	private FacilityCategory facilityCategory;
+
+	@Schema(description = "Waste schedules with type and next pickup date")
+	private List<WasteSchedule> schedules;
 
 }

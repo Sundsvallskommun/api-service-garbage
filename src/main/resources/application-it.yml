@@ -27,4 +27,4 @@ integration:
     username: user
     password: password
     remote-host: localhost
-    filename: schedule.csv
+    filename: schedule2.csv
