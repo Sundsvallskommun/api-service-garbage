@@ -1,7 +1,6 @@
 package se.sundsvall.garbage.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,15 +38,12 @@ public class GarbageScheduleRequest {
 	})
 	private String additionalInformation;
 
-	@Builder.Default
-	@Schema(description = "Page number", examples = "1", defaultValue = "1")
+	@Schema(description = "Page number", examples = "1", minimum = "1")
 	@Min(1)
-	private int page = 1;
+	private Integer page;
 
-	@Builder.Default
-	@Schema(description = "Result size per page", examples = "100", defaultValue = "20")
+	@Schema(description = "Result size per page. If omitted, all results are returned.", examples = "100", minimum = "1")
 	@Min(1)
-	@Max(1000)
-	private int limit = 20;
+	private Integer limit;
 
 }

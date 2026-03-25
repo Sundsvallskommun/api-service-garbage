@@ -6,18 +6,20 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum FacilityCategory {
-	VILLA(List.of("VI", "SMÅHUS")),
-	FRITIDSHUS(List.of("FH", "FRIHUS"));
+public enum WasteType {
+	WASTE(List.of("Restavfall")),
+	FOOD(List.of("Matavfall")),
+	PLASTIC(List.of("Plastförp.")),
+	PAPER(List.of("Pappersförp."));
 
 	final List<String> codes;
 
-	public static FacilityCategory forValue(final String code) {
+	public static WasteType forValue(final String code) {
 		if (code == null) {
 			return null;
 		}
-		return Arrays.stream(FacilityCategory.values())
-			.filter(facilityCategory -> facilityCategory.codes.contains(code))
+		return Arrays.stream(WasteType.values())
+			.filter(wasteType -> wasteType.codes.contains(code))
 			.findFirst()
 			.orElse(null);
 	}

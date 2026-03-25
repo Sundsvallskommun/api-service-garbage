@@ -1,6 +1,7 @@
 package se.sundsvall.garbage.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import se.sundsvall.garbage.service.mapper.Mapper;
 
 @Service
 public class GarbageService {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GarbageService.class);
 
 	private final GarbageScheduleRepository repository;
@@ -28,6 +30,7 @@ public class GarbageService {
 	private final GarbageScheduleSpecification garbageScheduleSpecification;
 
 	private final Dept44HealthUtility dept44HealthUtility;
+
 	@Value("${schedulers.update-garbage-schedules.name}")
 	private String scheduledJobName;
 
@@ -39,10 +42,9 @@ public class GarbageService {
 	}
 
 	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
-		return repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId), getPagingParameters(request))
-			.stream()
-			.map(Mapper::entityToResponse)
-			.toList();
+		final var entities = repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId), getPagingParameters(request))
+			.getContent();
+		return Mapper.entitiesToGroupedResponses(entities);
 	}
 
 	@Async
@@ -78,6 +80,10 @@ public class GarbageService {
 	}
 
 	private Pageable getPagingParameters(final GarbageScheduleRequest request) {
-		return PageRequest.of(request.getPage() - 1, request.getLimit());
+		return Optional.ofNullable(request.getLimit())
+			.map(limit -> (Pageable) PageRequest.of(
+				Optional.ofNullable(request.getPage()).orElse(1) - 1, limit))
+			.orElse(Pageable.unpaged());
 	}
+
 }

@@ -30,3 +30,4 @@ schedulers:
     name: updateGarbageSchedules
     cron: 0 0 5 * * MON-FRI
     shedlock-lock-at-most-for: PT2M
+    maximum-execution-time: PT2M

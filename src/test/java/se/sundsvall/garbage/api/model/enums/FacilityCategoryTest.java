@@ -15,6 +15,8 @@ class FacilityCategoryTest {
 	void testForValue() {
 		assertThat(FacilityCategory.forValue("VI")).isEqualTo(FacilityCategory.VILLA);
 		assertThat(FacilityCategory.forValue("FH")).isEqualTo(FacilityCategory.FRITIDSHUS);
+		assertThat(FacilityCategory.forValue("SMÅHUS")).isEqualTo(FacilityCategory.VILLA);
+		assertThat(FacilityCategory.forValue("FRIHUS")).isEqualTo(FacilityCategory.FRITIDSHUS);
 		assertThat(FacilityCategory.forValue("")).isNull();
 		assertThat(FacilityCategory.forValue(null)).isNull();
 		assertThat(FacilityCategory.forValue("foo")).isNull();

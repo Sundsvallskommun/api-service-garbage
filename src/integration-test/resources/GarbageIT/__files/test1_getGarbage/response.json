@@ -9,6 +9,12 @@
 			"houseNumber": "2"
 		},
 		"garbageScheduledDay": "TUESDAY",
-		"garbageScheduledWeek": "EVEN"
+		"garbageScheduledWeek": "EVEN",
+		"schedules": [
+			{
+				"wasteType": "WASTE",
+				"nextPickupDate": "2026-03-31"
+			}
+		]
 	}
 ]

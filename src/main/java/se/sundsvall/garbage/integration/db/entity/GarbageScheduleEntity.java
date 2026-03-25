@@ -2,15 +2,19 @@ package se.sundsvall.garbage.integration.db.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import se.sundsvall.garbage.api.model.enums.FacilityCategory;
+import se.sundsvall.garbage.api.model.enums.WasteType;
 
 @Entity
 @Table(name = "garbageschedule")
@@ -48,5 +52,12 @@ public class GarbageScheduleEntity {
 
 	@Column(name = "driveSchedule")
 	private String driveSchedule;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "wasteType")
+	private WasteType wasteType;
+
+	@Column(name = "nextPickupDate")
+	private LocalDate nextPickupDate;
 
 }

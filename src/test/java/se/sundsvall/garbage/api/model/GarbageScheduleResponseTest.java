@@ -1,7 +1,12 @@
 package se.sundsvall.garbage.api.model;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
 import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.Week;
 import se.sundsvall.garbage.api.model.enums.WeekDay;
 
@@ -10,10 +15,16 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanToString;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
+import static com.google.code.beanmatchers.BeanMatchers.registerValueGenerator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.allOf;
 
 class GarbageScheduleResponseTest {
+
+	@BeforeAll
+	static void setup() {
+		registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt()), LocalDate.class);
+	}
 
 	@Test
 	void testBean() {
@@ -33,6 +44,11 @@ class GarbageScheduleResponseTest {
 		final var additionalInformation = "A";
 		final var garbageScheduledDay = WeekDay.TUESDAY;
 		final var garbageScheduledWeek = Week.EVEN;
+		final var facilityCategory = FacilityCategory.VILLA;
+		final var schedules = List.of(WasteSchedule.builder()
+			.withWasteType("WASTE")
+			.withNextPickupDate(LocalDate.of(2026, 3, 31))
+			.build());
 
 		// Act
 		final var response = GarbageScheduleResponse.builder()
@@ -40,6 +56,8 @@ class GarbageScheduleResponseTest {
 			.withAdditionalInformation(additionalInformation)
 			.withGarbageScheduledDay(garbageScheduledDay)
 			.withGarbageScheduledWeek(garbageScheduledWeek)
+			.withFacilityCategory(facilityCategory)
+			.withSchedules(schedules)
 			.build();
 
 		// Assert
@@ -47,6 +65,8 @@ class GarbageScheduleResponseTest {
 		assertThat(response.getGarbageScheduledDay()).isEqualTo(garbageScheduledDay);
 		assertThat(response.getAddress()).isEqualTo(address);
 		assertThat(response.getAdditionalInformation()).isEqualTo(additionalInformation);
+		assertThat(response.getFacilityCategory()).isEqualTo(facilityCategory);
+		assertThat(response.getSchedules()).isEqualTo(schedules);
 	}
 
 	@Test

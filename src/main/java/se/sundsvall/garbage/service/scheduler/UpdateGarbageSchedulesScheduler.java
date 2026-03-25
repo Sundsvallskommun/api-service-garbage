@@ -23,7 +23,7 @@ public class UpdateGarbageSchedulesScheduler {
 		name = "${schedulers.update-garbage-schedules.name}",
 		lockAtMostFor = "${schedulers.update-garbage-schedules.shedlock-lock-at-most-for}",
 		maximumExecutionTime = "${schedulers.update-garbage-schedules.maximum-execution-time}")
-	public void execute() {
+	public void updateGarbageSchedules() {
 		municipalityIds.forEach(garbageService::updateGarbageSchedules);
 	}
 
