@@ -34,7 +34,7 @@ public class FileHandler {
 
 	private static final DateTimeFormatter PICKUP_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-	private static final Pattern ADDRESS_PATTERN = Pattern.compile("^(.+?)\\s+(\\d+)\\s*(.*)$");
+	private static final Pattern ADDRESS_PATTERN = Pattern.compile("^(.+?)\\s++(\\d++)\\s*+(.*)$");
 
 	private final SftpProperties sftpProperties;
 
