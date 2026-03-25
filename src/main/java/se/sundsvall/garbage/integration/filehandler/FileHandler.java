@@ -24,6 +24,9 @@ import tools.jackson.databind.MappingIterator;
 import tools.jackson.dataformat.csv.CsvMapper;
 import tools.jackson.dataformat.csv.CsvSchema;
 
+/**
+ * Handles downloading and parsing of garbage schedule CSV files from an SFTP server.
+ */
 @Component
 @EnableConfigurationProperties(SftpProperties.class)
 public class FileHandler {
@@ -42,6 +45,9 @@ public class FileHandler {
 		this.sftpProperties = sftpProperties;
 	}
 
+	/**
+	 * Downloads the garbage schedule CSV file from the configured SFTP server to a local temporary file.
+	 */
 	public void downloadFile() {
 		try {
 			final var manager = VFS.getManager();
@@ -59,6 +65,12 @@ public class FileHandler {
 		}
 	}
 
+	/**
+	 * Parses the downloaded CSV file into a list of {@link GarbageScheduleEntity}.
+	 * The temporary file is deleted after parsing. Returns an empty list if parsing fails.
+	 *
+	 * @return a list of parsed entities, or an empty list on error
+	 */
 	public List<GarbageScheduleEntity> parseFile() {
 		final var csvMapper = new CsvMapper();
 		final var schema = buildSchema();
@@ -78,6 +90,13 @@ public class FileHandler {
 		}
 	}
 
+	/**
+	 * Maps a parsed CSV row to a {@link GarbageScheduleEntity}, extracting street, house number,
+	 * and additional information from the full address field.
+	 *
+	 * @param  row the parsed CSV row
+	 * @return     the mapped entity
+	 */
 	GarbageScheduleEntity mapToEntity(final ParsedRow row) {
 		final var fullAddress = Optional.ofNullable(row.getFullAddress())
 			.map(String::trim)
@@ -111,6 +130,12 @@ public class FileHandler {
 			.build();
 	}
 
+	/**
+	 * Parses a pickup date string in "yyyy-MM-dd HH:mm:ss" format to a {@link LocalDate}.
+	 *
+	 * @param  dateStr the date string to parse, or {@code null}
+	 * @return         the parsed date, or {@code null} if the input is null, empty, or blank
+	 */
 	private LocalDate parsePickupDate(final String dateStr) {
 		return Optional.ofNullable(dateStr)
 			.map(String::trim)
@@ -119,11 +144,18 @@ public class FileHandler {
 			.orElse(null);
 	}
 
+	/**
+	 * Builds the CSV schema defining the column order and semicolon separator for the schedule file.
+	 * The first three columns (id1, id2, id3) are unused identifiers from the source system and are
+	 * discarded during mapping.
+	 *
+	 * @return the configured {@link CsvSchema}
+	 */
 	private CsvSchema buildSchema() {
 		return CsvSchema.builder()
-			.addColumn("id1")
-			.addColumn("id2")
-			.addColumn("id3")
+			.addColumn("id1") // Unused source system identifier
+			.addColumn("id2") // Unused source system identifier
+			.addColumn("id3") // Unused source system identifier
 			.addColumn("fullAddress")
 			.addColumn("postalCode")
 			.addColumn("city")

@@ -1,25 +1,25 @@
 package se.sundsvall.garbage.api.model.enums;
 
 import java.util.Arrays;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum WasteType {
-	WASTE(List.of("Restavfall")),
-	FOOD(List.of("Matavfall")),
-	PLASTIC(List.of("Plastförp.")),
-	PAPER(List.of("Pappersförp."));
+	WASTE("Restavfall"),
+	FOOD("Matavfall"),
+	PLASTIC("Plastförp."),
+	PAPER("Pappersförp.");
 
-	final List<String> codes;
+	private final String code;
+
+	WasteType(final String code) {
+		this.code = code;
+	}
 
 	public static WasteType forValue(final String code) {
 		if (code == null) {
 			return null;
 		}
 		return Arrays.stream(WasteType.values())
-			.filter(wasteType -> wasteType.codes.contains(code))
+			.filter(wasteType -> wasteType.code.equals(code))
 			.findFirst()
 			.orElse(null);
 	}

@@ -60,36 +60,36 @@ class FileHandlerTest {
 			.isNotNull()
 			.hasSize(4);
 
-		// Row 1: Trossvägen 3 - simple address with number
+		// Row 1
 		final var firstRow = result.getFirst();
-		assertThat(firstRow.getStreet()).isEqualTo("Trossvägen");
-		assertThat(firstRow.getHouseNumber()).isEqualTo("3");
+		assertThat(firstRow.getStreet()).isEqualTo("Test Street");
+		assertThat(firstRow.getHouseNumber()).isEqualTo("1");
 		assertThat(firstRow.getAdditionalInformation()).isEmpty();
-		assertThat(firstRow.getCity()).isEqualTo("Alnö");
+		assertThat(firstRow.getCity()).isEqualTo("Test City");
 		assertThat(firstRow.getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
 		assertThat(firstRow.getDriveSchedule()).isEqualTo("U11 TI2");
 		assertThat(firstRow.getWasteType()).isEqualTo(WasteType.WASTE);
-		assertThat(firstRow.getNextPickupDate()).isEqualTo(LocalDate.of(2026, 3, 31));
-		assertThat(firstRow.getPostalCode()).isEqualTo("86533");
+		assertThat(firstRow.getNextPickupDate()).isEqualTo(LocalDate.of(2026, 1, 1));
+		assertThat(firstRow.getPostalCode()).isEqualTo("12345");
 
-		// Row 2: Båtsmansvägen 33 A - address with additional info
+		// Row 2
 		final var secondRow = result.get(1);
-		assertThat(secondRow.getStreet()).isEqualTo("Västra Radiogatan");
+		assertThat(secondRow.getStreet()).isEqualTo("Test Road");
 		assertThat(secondRow.getHouseNumber()).isEqualTo("18");
 		assertThat(secondRow.getAdditionalInformation()).isEmpty();
 		assertThat(secondRow.getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
 		assertThat(secondRow.getWasteType()).isEqualTo(WasteType.WASTE);
 
-		// Row 3: Nora 245 - place name with number
+		// Row 3
 		final var thirdRow = result.get(2);
-		assertThat(thirdRow.getStreet()).isEqualTo("Västra Radiogatan");
+		assertThat(thirdRow.getStreet()).isEqualTo("Test Road");
 		assertThat(thirdRow.getHouseNumber()).isEqualTo("20");
 		assertThat(thirdRow.getAdditionalInformation()).isEmpty();
 		assertThat(thirdRow.getFacilityCategory()).isEqualTo(FacilityCategory.VILLA);
 
-		// Row 4: Fritid Alnö Spikarna - no house number
+		// Row 4
 		final var fourthRow = result.get(3);
-		assertThat(fourthRow.getStreet()).isEqualTo("Römstavägen");
+		assertThat(fourthRow.getStreet()).isEqualTo("Test Avenue");
 		assertThat(fourthRow.getHouseNumber()).isEqualTo("4");
 		assertThat(fourthRow.getAdditionalInformation()).isEmpty();
 		assertThat(fourthRow.getDriveSchedule()).isEqualTo("U14 FR2");

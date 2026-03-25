@@ -1,9 +1,7 @@
 package se.sundsvall.garbage.api.model.enums;
 
 import java.util.Arrays;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public enum WeekDay {
 	MONDAY("MÅ"),
 	TUESDAY("TI"),
@@ -12,6 +10,10 @@ public enum WeekDay {
 	FRIDAY("FR");
 
 	final String shortCode;
+
+	WeekDay(final String shortCode) {
+		this.shortCode = shortCode;
+	}
 
 	public static WeekDay forValue(final String shortCode) {
 		return Arrays.stream(WeekDay.values())
