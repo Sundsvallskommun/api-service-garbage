@@ -1,106 +1,96 @@
 openapi: 3.1.0
 info:
   title: Garbage
-  contact: {}
+  contact: { }
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
   version: "2.1"
 servers:
-- url: http://localhost:61310
-  description: Generated server url
+  - url: http://localhost:54273
+    description: Generated server url
 paths:
   /{municipalityId}/schedules:
     get:
       tags:
-      - GarbageSchedule
+        - GarbageSchedule
       summary: Get garbage schedule for an address
       operationId: getGarbage
       parameters:
-      - name: municipalityId
-        in: path
-        description: Municipality id
-        required: true
-        schema:
-          type: string
-        example: 2281
-      - name: street
-        in: query
-        description: Address
-        required: false
-        schema:
-          type:
-          - string
-          - "null"
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: street
+          in: query
           description: Address
-          examples:
-          - Testgatan
-      - name: houseNumber
-        in: query
-        description: Address
-        required: false
-        schema:
-          type:
-          - string
-          - "null"
+          required: false
+          schema:
+            type: string
+            description: Address
+            examples:
+              - Testgatan
+        - name: houseNumber
+          in: query
           description: Address
-          examples:
-          - "12"
-      - name: postalCode
-        in: query
-        description: Zipcode
-        required: false
-        schema:
-          type:
-          - string
-          - "null"
+          required: false
+          schema:
+            type: string
+            description: Address
+            examples:
+              - "12"
+        - name: postalCode
+          in: query
           description: Zipcode
-          examples:
-          - "85731"
-      - name: city
-        in: query
-        description: City
-        required: false
-        schema:
-          type:
-          - string
-          - "null"
+          required: false
+          schema:
+            type: string
+            description: Zipcode
+            examples:
+              - "85731"
+        - name: city
+          in: query
           description: City
+          required: false
+          schema:
+            type: string
+            description: City
+            example: Sundsvall
           example: Sundsvall
-        example: Sundsvall
-      - name: additionalInformation
-        in: query
-        description: Any other identifier. Example HouseLetter or building clarification
-        required: false
-        schema:
-          type:
-          - string
-          - "null"
+        - name: additionalInformation
+          in: query
           description: Any other identifier. Example HouseLetter or building clarification
-          examples:
-          - A
-      - name: page
-        in: query
-        description: Page number
-        required: false
-        schema:
-          type: integer
-          format: int32
+          required: false
+          schema:
+            type: string
+            description: Any other identifier. Example HouseLetter or building clarification
+            examples:
+              - A
+        - name: page
+          in: query
           description: Page number
-          examples:
-          - "1"
-          minimum: 1
-      - name: limit
-        in: query
-        description: "Result size per page. If omitted, all results are returned."
-        required: false
-        schema:
-          type: integer
-          format: int32
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Page number
+            examples:
+              - "1"
+            minimum: 1
+        - name: limit
+          in: query
           description: "Result size per page. If omitted, all results are returned."
-          examples:
-          - "100"
-          minimum: 1
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: "Result size per page. If omitted, all results are returned."
+            examples:
+              - "100"
+            minimum: 1
       responses:
         "200":
           description: Successful Operation
@@ -116,8 +106,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                - $ref: "#/components/schemas/Problem"
-                - $ref: "#/components/schemas/ConstraintViolationProblem"
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -132,17 +122,17 @@ paths:
                 $ref: "#/components/schemas/Problem"
     put:
       tags:
-      - GarbageSchedule
+        - GarbageSchedule
       summary: Trigger a garbage schedule update
       operationId: updateGarbageSchedules
       parameters:
-      - name: municipalityId
-        in: path
-        description: Municipality id
-        required: true
-        schema:
-          type: string
-        example: 2281
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
       responses:
         "202":
           description: Successful Operation
@@ -152,8 +142,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                - $ref: "#/components/schemas/Problem"
-                - $ref: "#/components/schemas/ConstraintViolationProblem"
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -169,7 +159,7 @@ paths:
   /api-docs:
     get:
       tags:
-      - API
+        - API
       summary: OpenAPI
       operationId: getApiDocs
       responses:
@@ -215,10 +205,10 @@ components:
             $ref: "#/components/schemas/Violation"
         title:
           type: string
-        detail:
-          type: string
         causeAsProblem:
           $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -238,7 +228,7 @@ components:
         instance:
           type: string
           format: uri
-        causeAsProblem: {}
+        causeAsProblem: { }
     Violation:
       type: object
       properties:
@@ -253,31 +243,29 @@ components:
           type: string
           description: Address
           examples:
-          - Testgatan
+            - Testgatan
           minLength: 1
         houseNumber:
           type: string
           description: Address
           examples:
-          - "12"
+            - "12"
           minLength: 1
         postalCode:
           type: string
           description: Zipcode
           examples:
-          - "85731"
+            - "85731"
           minLength: 1
         city:
-          type:
-          - string
-          - "null"
+          type: string
           description: City
           examples:
-          - Sundsvall
+            - Sundsvall
       required:
-      - houseNumber
-      - postalCode
-      - street
+        - houseNumber
+        - postalCode
+        - street
     GarbageScheduleResponse:
       type: object
       properties:
@@ -288,34 +276,34 @@ components:
           type: string
           description: Any other identifier. Example HouseLetter or building clarification
           examples:
-          - A
+            - A
         garbageScheduledDay:
           type: string
           description: 'What weekday garbage is collected '
           enum:
-          - MONDAY
-          - TUESDAY
-          - WEDNESDAY
-          - THURSDAY
-          - FRIDAY
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
           examples:
-          - MONDAY
+            - MONDAY
         garbageScheduledWeek:
           type: string
           description: 'What week garbage is collected. Odd/even numbers '
           enum:
-          - ODD
-          - EVEN
+            - ODD
+            - EVEN
           examples:
-          - ODD
+            - ODD
         facilityCategory:
           type: string
           description: 'Which type of facility '
           enum:
-          - VILLA
-          - FRITIDSHUS
+            - VILLA
+            - FRITIDSHUS
           examples:
-          - VILLA
+            - VILLA
         schedules:
           type: array
           description: Waste schedules with type and next pickup date
@@ -329,16 +317,16 @@ components:
           type: string
           description: Type of waste
           enum:
-          - WASTE
-          - FOOD
-          - PLASTIC
-          - PAPER
+            - WASTE
+            - FOOD
+            - PLASTIC
+            - PAPER
           examples:
-          - WASTE
+            - WASTE
         nextPickupDate:
           type: string
           format: date
           description: Next scheduled pickup date
           examples:
-          - 2026-03-31
-  securitySchemes: {}
+            - 2026-03-31
+  securitySchemes: { }
