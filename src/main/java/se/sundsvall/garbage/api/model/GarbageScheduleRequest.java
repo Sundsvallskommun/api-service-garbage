@@ -13,29 +13,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GarbageScheduleRequest {
 
-	@Schema(description = "Address", types = {
-		"string", "null"
-	}, examples = "Testgatan")
+	@Schema(description = "Address", examples = "Testgatan")
 	private String street;
 
-	@Schema(description = "Address", types = {
-		"string", "null"
-	}, examples = "12")
+	@Schema(description = "Address", examples = "12")
 	private String houseNumber;
 
-	@Schema(description = "Zipcode", types = {
-		"string", "null"
-	}, examples = "85731")
+	@Schema(description = "Zipcode", examples = "85731")
 	private String postalCode;
 
-	@Schema(description = "City", types = {
-		"string", "null"
-	}, example = "Sundsvall")
+	@Schema(description = "City", example = "Sundsvall")
 	private String city;
 
-	@Schema(description = "Any other identifier. Example HouseLetter or building clarification", examples = "A", types = {
-		"string", "null"
-	})
+	@Schema(description = "Any other identifier. Example HouseLetter or building clarification", examples = "A")
 	private String additionalInformation;
 
 	@Schema(description = "Page number", examples = "1", minimum = "1")

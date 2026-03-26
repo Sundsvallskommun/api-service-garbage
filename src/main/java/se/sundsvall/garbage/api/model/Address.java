@@ -29,8 +29,6 @@ public class Address {
 	@Schema(description = "Zipcode", examples = "85731")
 	private String postalCode;
 
-	@Schema(description = "City", types = {
-		"string", "null"
-	}, examples = "Sundsvall")
+	@Schema(description = "City", examples = "Sundsvall")
 	private String city;
 }
