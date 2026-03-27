@@ -109,8 +109,8 @@ class FileHandlerTest {
 		final var entity = fileHandler.mapToEntity(row);
 
 		assertThat(entity.getStreet()).isEmpty();
-		assertThat(entity.getHouseNumber()).isNull();
-		assertThat(entity.getAdditionalInformation()).isNull();
+		assertThat(entity.getHouseNumber()).isEmpty();
+		assertThat(entity.getAdditionalInformation()).isEmpty();
 		assertThat(entity.getPostalCode()).isNull();
 		assertThat(entity.getCity()).isNull();
 		assertThat(entity.getWasteType()).isNull();
