@@ -66,8 +66,8 @@ public class FileHandler {
 	}
 
 	/**
-	 * Parses the downloaded CSV file into a list of {@link GarbageScheduleEntity}.
-	 * The temporary file is deleted after parsing. Returns an empty list if parsing fails.
+	 * Parses the downloaded CSV file into a list of {@link GarbageScheduleEntity}. The temporary file is deleted after
+	 * parsing. Returns an empty list if parsing fails.
 	 *
 	 * @return a list of parsed entities, or an empty list on error
 	 */
@@ -91,8 +91,8 @@ public class FileHandler {
 	}
 
 	/**
-	 * Maps a parsed CSV row to a {@link GarbageScheduleEntity}, extracting street, house number,
-	 * and additional information from the full address field.
+	 * Maps a parsed CSV row to a {@link GarbageScheduleEntity}, extracting street, house number, and additional information
+	 * from the full address field.
 	 *
 	 * @param  row the parsed CSV row
 	 * @return     the mapped entity
@@ -113,8 +113,8 @@ public class FileHandler {
 			additionalInformation = matcher.group(3).trim();
 		} else {
 			street = fullAddress;
-			houseNumber = null;
-			additionalInformation = null;
+			houseNumber = "";
+			additionalInformation = "";
 		}
 
 		return GarbageScheduleEntity.builder()
@@ -145,9 +145,8 @@ public class FileHandler {
 	}
 
 	/**
-	 * Builds the CSV schema defining the column order and semicolon separator for the schedule file.
-	 * The first three columns (id1, id2, id3) are unused identifiers from the source system and are
-	 * discarded during mapping.
+	 * Builds the CSV schema defining the column order and semicolon separator for the schedule file. The first three
+	 * columns (id1, id2, id3) are unused identifiers from the source system and are discarded during mapping.
 	 *
 	 * @return the configured {@link CsvSchema}
 	 */
