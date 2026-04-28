@@ -1,12 +1,12 @@
 package se.sundsvall.garbage.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,10 @@ import se.sundsvall.garbage.service.mapper.Mapper;
 public class GarbageService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GarbageService.class);
+
+	// Sort by primary key so pagination is stable across calls. Uses the PK index
+	// (no sort buffer) and gives full determinism for the in-memory grouping that follows.
+	private static final Sort STABLE_SORT = Sort.by("id");
 
 	private final GarbageScheduleRepository repository;
 
@@ -41,10 +45,41 @@ public class GarbageService {
 		this.dept44HealthUtility = dept44HealthUtility;
 	}
 
+	private static List<GarbageScheduleResponse> paginate(final List<GarbageScheduleResponse> grouped, final GarbageScheduleRequest request) {
+		return Optional.ofNullable(request.getLimit())
+			.map(rawLimit -> sliceForPage(grouped, rawLimit, request.getPage()))
+			.orElse(grouped);
+	}
+
+	/**
+	 * Returns the slice of {@code grouped} corresponding to the requested page/limit. Sanitizes
+	 * lower bounds at the use site (validation {@code @Min(1)} is not visible to static analysis as
+	 * sanitization) and uses exact long arithmetic so out-of-range page values yield an empty slice
+	 * rather than integer-overflow defects.
+	 */
+	private static List<GarbageScheduleResponse> sliceForPage(final List<GarbageScheduleResponse> grouped, final int rawLimit, final Integer rawPage) {
+		final int limit = Math.max(rawLimit, 1);
+		final int page = Math.max(Optional.ofNullable(rawPage).orElse(1), 1);
+		final long offset;
+		try {
+			offset = Math.multiplyExact(page - 1L, (long) limit);
+		} catch (final ArithmeticException _) {
+			return List.of();
+		}
+		final long endExclusive = offset > Long.MAX_VALUE - limit ? Long.MAX_VALUE : offset + limit;
+		final int from = (int) Math.min(offset, grouped.size());
+		final int to = (int) Math.min(endExclusive, grouped.size());
+		return new ArrayList<>(grouped.subList(from, to));
+	}
+
 	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
-		final var entities = repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId), getPagingParameters(request))
-			.getContent();
-		return Mapper.entitiesToGroupedResponses(entities);
+		// Pagination must be applied to grouped responses, not to entity rows. The DB stores
+		// one row per (address, wasteType); paging the rows splits an address across pages and
+		// produces partial schedules, so we load matching entities, group, and then slice.
+		final var entities = repository.findAll(
+			garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId),
+			STABLE_SORT);
+		return paginate(Mapper.entitiesToGroupedResponses(entities), request);
 	}
 
 	@Async
@@ -77,13 +112,6 @@ public class GarbageService {
 		} finally {
 			LOGGER.info("End updating schedules");
 		}
-	}
-
-	private Pageable getPagingParameters(final GarbageScheduleRequest request) {
-		return Optional.ofNullable(request.getLimit())
-			.map(limit -> (Pageable) PageRequest.of(
-				Optional.ofNullable(request.getPage()).orElse(1) - 1, limit))
-			.orElse(Pageable.unpaged());
 	}
 
 }

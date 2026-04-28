@@ -1,0 +1,24 @@
+[
+	{
+		"additionalInformation": "A",
+		"facilityCategory": "VILLA",
+		"address": {
+			"city": "TESTSTAD",
+			"street": "Storgatan",
+			"postalCode": "12345",
+			"houseNumber": "5"
+		},
+		"garbageScheduledDay": "WEDNESDAY",
+		"garbageScheduledWeek": "ODD",
+		"schedules": [
+			{
+				"wasteType": "WASTE",
+				"nextPickupDate": "2026-05-06"
+			},
+			{
+				"wasteType": "FOOD",
+				"nextPickupDate": "2026-05-06"
+			}
+		]
+	}
+]
