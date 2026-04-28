@@ -1,12 +1,12 @@
 package se.sundsvall.garbage.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,10 @@ import se.sundsvall.garbage.service.mapper.Mapper;
 public class GarbageService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GarbageService.class);
+
+	// Sort by primary key so pagination is stable across calls. Uses the PK index
+	// (no sort buffer) and gives full determinism for the in-memory grouping that follows.
+	private static final Sort STABLE_SORT = Sort.by("id");
 
 	private final GarbageScheduleRepository repository;
 
@@ -41,10 +45,25 @@ public class GarbageService {
 		this.dept44HealthUtility = dept44HealthUtility;
 	}
 
+	private static List<GarbageScheduleResponse> paginate(final List<GarbageScheduleResponse> grouped, final GarbageScheduleRequest request) {
+		return Optional.ofNullable(request.getLimit())
+			.map(limit -> {
+				final var page = Optional.ofNullable(request.getPage()).orElse(1);
+				final var from = Math.min((page - 1) * limit, grouped.size());
+				final var to = Math.min(from + limit, grouped.size());
+				return (List<GarbageScheduleResponse>) new ArrayList<>(grouped.subList(from, to));
+			})
+			.orElse(grouped);
+	}
+
 	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
-		final var entities = repository.findAll(garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId), getPagingParameters(request))
-			.getContent();
-		return Mapper.entitiesToGroupedResponses(entities);
+		// Pagination must be applied to grouped responses, not to entity rows. The DB stores
+		// one row per (address, wasteType); paging the rows splits an address across pages and
+		// produces partial schedules, so we load matching entities, group, and then slice.
+		final var entities = repository.findAll(
+			garbageScheduleSpecification.createGarbageScheduleSpecification(request, municipalityId),
+			STABLE_SORT);
+		return paginate(Mapper.entitiesToGroupedResponses(entities), request);
 	}
 
 	@Async
@@ -77,13 +96,6 @@ public class GarbageService {
 		} finally {
 			LOGGER.info("End updating schedules");
 		}
-	}
-
-	private Pageable getPagingParameters(final GarbageScheduleRequest request) {
-		return Optional.ofNullable(request.getLimit())
-			.map(limit -> (Pageable) PageRequest.of(
-				Optional.ofNullable(request.getPage()).orElse(1) - 1, limit))
-			.orElse(Pageable.unpaged());
 	}
 
 }
