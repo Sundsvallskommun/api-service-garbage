@@ -47,13 +47,29 @@ public class GarbageService {
 
 	private static List<GarbageScheduleResponse> paginate(final List<GarbageScheduleResponse> grouped, final GarbageScheduleRequest request) {
 		return Optional.ofNullable(request.getLimit())
-			.map(limit -> {
-				final var page = Optional.ofNullable(request.getPage()).orElse(1);
-				final var from = Math.min((page - 1) * limit, grouped.size());
-				final var to = Math.min(from + limit, grouped.size());
-				return (List<GarbageScheduleResponse>) new ArrayList<>(grouped.subList(from, to));
-			})
+			.map(rawLimit -> sliceForPage(grouped, rawLimit, request.getPage()))
 			.orElse(grouped);
+	}
+
+	/**
+	 * Returns the slice of {@code grouped} corresponding to the requested page/limit. Sanitizes
+	 * lower bounds at the use site (validation {@code @Min(1)} is not visible to static analysis as
+	 * sanitization) and uses exact long arithmetic so out-of-range page values yield an empty slice
+	 * rather than integer-overflow defects.
+	 */
+	private static List<GarbageScheduleResponse> sliceForPage(final List<GarbageScheduleResponse> grouped, final int rawLimit, final Integer rawPage) {
+		final int limit = Math.max(rawLimit, 1);
+		final int page = Math.max(Optional.ofNullable(rawPage).orElse(1), 1);
+		final long offset;
+		try {
+			offset = Math.multiplyExact(page - 1L, (long) limit);
+		} catch (final ArithmeticException _) {
+			return List.of();
+		}
+		final long endExclusive = offset > Long.MAX_VALUE - limit ? Long.MAX_VALUE : offset + limit;
+		final int from = (int) Math.min(offset, grouped.size());
+		final int to = (int) Math.min(endExclusive, grouped.size());
+		return new ArrayList<>(grouped.subList(from, to));
 	}
 
 	public List<GarbageScheduleResponse> getGarbageSchedules(final String municipalityId, final GarbageScheduleRequest request) {
