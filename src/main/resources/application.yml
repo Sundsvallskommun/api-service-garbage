@@ -24,6 +24,13 @@ spring:
     hikari:
       pool-name: garbage-pool
     type: com.zaxxer.hikari.HikariDataSource
+integration:
+  sftp:
+    # Credentials (username/password/remote-host/filename) are injected via environment in each
+    # deployment. connect-timeout bounds the handshake; session-timeout is the socket read timeout,
+    # so a stalled transfer aborts quickly instead of hanging the scheduled job.
+    connect-timeout: PT30S
+    session-timeout: PT30S
 schedulers:
   update-garbage-schedules:
     municipality-ids: 2281
