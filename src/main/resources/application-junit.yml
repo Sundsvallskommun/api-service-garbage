@@ -28,3 +28,5 @@ integration:
     password: password
     remote-host: localhost
     filename: schedule.csv
+    connect-timeout: PT30S
+    session-timeout: PT30S

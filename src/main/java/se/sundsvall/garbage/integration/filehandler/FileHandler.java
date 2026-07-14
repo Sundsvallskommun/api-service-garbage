@@ -1,6 +1,9 @@
 package se.sundsvall.garbage.integration.filehandler;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,9 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.Selectors;
+import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.VFS;
+import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -33,6 +36,11 @@ public class FileHandler {
 
 	private static final String TEMP_FILE = System.getProperty("java.io.tmpdir") + "/schedule.csv";
 
+	// The commons-vfs2/JSch SFTP input stream turns each read into a synchronous request→response, so
+	// a small buffer means thousands of round-trips. Over a high-latency path that collapses throughput
+	// (an 8 MB file took ~10 min in production). A 64 KB buffer cuts the round-trip count dramatically.
+	private static final int DOWNLOAD_BUFFER_SIZE = 64 * 1024;
+
 	private static final Logger log = LoggerFactory.getLogger(FileHandler.class);
 
 	private static final DateTimeFormatter PICKUP_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -49,19 +57,38 @@ public class FileHandler {
 	 * Downloads the garbage schedule CSV file from the configured SFTP server to a local temporary file.
 	 */
 	public void downloadFile() {
+		final var start = System.nanoTime();
 		try {
 			final var manager = VFS.getManager();
+
+			// Bound the transfer so a stalled connection fails fast instead of hanging the whole
+			// scheduled job. connectTimeout caps the TCP/SSH handshake; sessionTimeout is the socket
+			// read timeout, so a mid-transfer stall (no bytes for that long) aborts rather than idling.
+			final var options = new FileSystemOptions();
+			final var builder = SftpFileSystemConfigBuilder.getInstance();
+			Optional.ofNullable(sftpProperties.connectTimeout()).ifPresent(timeout -> builder.setConnectTimeout(options, timeout));
+			Optional.ofNullable(sftpProperties.sessionTimeout()).ifPresent(timeout -> builder.setSessionTimeout(options, timeout));
+
 			final var local = manager.resolveFile(TEMP_FILE);
 			final var remote = manager.resolveFile(String.format("sftp://%s:%s@%s/%s",
 				sftpProperties.username(),
 				sftpProperties.password(),
 				sftpProperties.remoteHost(),
-				sftpProperties.filename()));
-			local.copyFrom(remote, Selectors.SELECT_SELF);
-			local.close();
-			remote.close();
-		} catch (final FileSystemException e) {
-			log.info("Something went wrong downloading file", e);
+				sftpProperties.filename()), options);
+			try {
+				// Stream through a large buffer rather than copyFrom's default: buffering forces the SFTP
+				// channel to serve large reads, so an 8 MB file is ~128 round-trips instead of ~1000+.
+				try (final var in = new BufferedInputStream(remote.getContent().getInputStream(), DOWNLOAD_BUFFER_SIZE);
+					final var out = new BufferedOutputStream(local.getContent().getOutputStream(), DOWNLOAD_BUFFER_SIZE)) {
+					in.transferTo(out);
+				}
+			} finally {
+				local.close();
+				remote.close();
+			}
+			log.info("Downloaded schedule file ({} bytes) in {} ms", fileSize(), elapsedMs(start));
+		} catch (final IOException e) {
+			log.info("Something went wrong downloading file (after {} ms)", elapsedMs(start), e);
 		}
 	}
 
@@ -72,6 +99,7 @@ public class FileHandler {
 	 * @return a list of parsed entities, or an empty list on error
 	 */
 	public List<GarbageScheduleEntity> parseFile() {
+		final var start = System.nanoTime();
 		final var csvMapper = new CsvMapper();
 		final var schema = buildSchema();
 
@@ -83,10 +111,23 @@ public class FileHandler {
 				.toList();
 
 			Files.delete(Path.of(TEMP_FILE));
+			log.info("Parsed {} rows from schedule file in {} ms", result.size(), elapsedMs(start));
 			return result;
 		} catch (final Exception e) {
-			log.info("Something went wrong parsing file", e);
+			log.info("Something went wrong parsing file (after {} ms)", elapsedMs(start), e);
 			return Collections.emptyList();
+		}
+	}
+
+	private static long elapsedMs(final long startNanos) {
+		return (System.nanoTime() - startNanos) / 1_000_000;
+	}
+
+	private static long fileSize() {
+		try {
+			return Files.size(Path.of(TEMP_FILE));
+		} catch (final IOException e) {
+			return -1;
 		}
 	}
 
