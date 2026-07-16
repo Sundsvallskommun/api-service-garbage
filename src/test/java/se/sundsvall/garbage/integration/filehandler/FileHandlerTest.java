@@ -16,6 +16,7 @@ import se.sundsvall.garbage.api.model.enums.FacilityCategory;
 import se.sundsvall.garbage.api.model.enums.WasteType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,12 +30,16 @@ class FileHandlerTest {
 	private FileHandler fileHandler;
 
 	@Test
-	void downloadFile() {
+	void downloadFileWhenRemoteUnreachable() {
 		when(sftpProperties.username()).thenReturn("username");
 		when(sftpProperties.password()).thenReturn("password");
 		when(sftpProperties.remoteHost()).thenReturn("remoteHost");
 
-		fileHandler.downloadFile();
+		// A download failure must propagate rather than be swallowed, otherwise parseFile() runs against
+		// a missing temp file and the job reports "did not contain any rows" instead of the real cause.
+		assertThatThrownBy(() -> fileHandler.downloadFile())
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessageContaining("Failed to download garbage schedule file from SFTP");
 
 		verify(sftpProperties).username();
 		verify(sftpProperties).password();
