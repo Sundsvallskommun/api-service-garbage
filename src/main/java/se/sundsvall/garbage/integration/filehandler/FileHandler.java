@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import org.apache.commons.vfs2.FileSystemOptions;
-import org.apache.commons.vfs2.VFS;
+import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +58,16 @@ public class FileHandler {
 	 */
 	public void downloadFile() {
 		final var start = System.nanoTime();
+
+		// Use a private manager rather than the process-wide VFS.getManager() singleton, and close it
+		// when done. The shared manager caches the SftpFileSystem — session and channel — indefinitely,
+		// and SftpFileSystem.getChannel() hands back its cached idleChannel WITHOUT revalidating the
+		// session. Since sessionTimeout closes the idle session shortly after a run, the next run would
+		// otherwise pick up a dead channel and fail with "Pipe closed". Owning the manager keeps the
+		// session alive only for the duration of the transfer, so nothing stale can be cached or shared.
+		final var manager = new StandardFileSystemManager();
 		try {
-			final var manager = VFS.getManager();
+			manager.init();
 
 			// Bound the transfer so a stalled connection fails fast instead of hanging the whole
 			// scheduled job. connectTimeout caps the TCP/SSH handshake; sessionTimeout is the socket
@@ -88,7 +96,11 @@ public class FileHandler {
 			}
 			log.info("Downloaded schedule file ({} bytes) in {} ms", fileSize(), elapsedMs(start));
 		} catch (final IOException e) {
-			log.info("Something went wrong downloading file (after {} ms)", elapsedMs(start), e);
+			// Fail loudly: a swallowed download failure lets parseFile() run against a missing or stale
+			// temp file, which surfaces as the misleading "Schedule file did not contain any rows".
+			throw new IllegalStateException("Failed to download garbage schedule file from SFTP after " + elapsedMs(start) + " ms", e);
+		} finally {
+			manager.close();
 		}
 	}
 
