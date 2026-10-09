@@ -10,7 +10,9 @@ import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
 import se.sundsvall.garbage.Application;
 
 @WireMockAppTestSuite(files = "classpath:/GarbageIT/", classes = Application.class)
-@Sql({"/db/scripts/truncate.sql", "/db/scripts/testdata-it.sql"})
+@Sql({
+	"/db/scripts/truncate.sql", "/db/scripts/testdata-it.sql"
+})
 class GarbageIT extends AbstractAppTest {
 
 	@Test
